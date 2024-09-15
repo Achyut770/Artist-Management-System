@@ -1,0 +1,49 @@
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 2px;
+    color: rgb(73, 72, 72);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.submit-button {
+    text-align: center;
+    width: 100%;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+
+
+
+
+
+.gender-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+}
+
+.gender-group label {
+    display: flex;
+    flex-direction: row;
+}

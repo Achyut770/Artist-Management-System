@@ -1,0 +1,27 @@
+.auth_container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f0f4f8;
+    padding: 40px;
+    overflow: auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth_card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: min(500px, 97%);
+    margin: auto;
+}
+
+.signup-link {
+    text-align: center;
+}

@@ -1,0 +1,4 @@
+.form_container {
+    box-shadow: var(--form-border-shadow);
+    padding: 20px;
+}

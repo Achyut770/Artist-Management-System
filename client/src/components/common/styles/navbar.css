@@ -1,0 +1,107 @@
+.navContainer {
+    width: max(19%, 200px);
+    background-color: white;
+    padding: max(1.5vw, 10px);
+    box-sizing: border-box;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    border-right: 1px solid rgb(225, 224, 224);
+    position: sticky;
+    top: 0px;
+
+}
+
+.neters {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.icon {
+    font-size: 25px;
+    margin-top: 5px;
+}
+
+.iconLogo {
+    margin-top: 12px;
+}
+
+.indvLinks {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    padding: 7px 13px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.navLinks {
+    color: gray;
+    border-radius: 5px;
+}
+
+.linkName {
+    font-weight: 500;
+}
+
+.indvLinks .linkName {
+    font-size: 1.1rem;
+    color: gray;
+}
+
+.navLinks:hover {
+    background-color: var(--primary-hover);
+}
+
+.slectedLinks .linkName {
+    color: white;
+}
+
+.slectedLinks,
+.slectedLinks:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.resHam {
+
+    display: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .navContainer {
+        display: none;
+    }
+
+    .resHam {
+        display: block;
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        z-index: 2;
+        font-size: 25px;
+        color: var(--white-text);
+    }
+
+    .fixResHam {
+        position: fixed;
+    }
+
+    .resNavContainer {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 1;
+        padding-top: 40px;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .resHam {
+        top: 5px;
+        left: 10px;
+    }
+}

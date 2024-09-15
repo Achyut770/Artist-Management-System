@@ -6,7 +6,7 @@ const router = express.Router();
 router.use(express.json());
 
 router.post('/:artistId', (req, res) => {
-    const { title, release_date, genre, duration, album } = req.body;
+    const { title, release_date, genre, album_name, album } = req.body;
     const { artistId } = req.params;
 
     const checkArtistQuery = 'SELECT * FROM artist WHERE id = ?';
@@ -18,9 +18,9 @@ router.post('/:artistId', (req, res) => {
             return res.status(404).json({ error: 'Artist not found' });
         }
 
-        const insertSongQuery = `INSERT INTO song (title, release_date, genre, duration, album, artist_id) 
+        const insertSongQuery = `INSERT INTO song (title, release_date, genre, album_name, album, artist_id) 
                                  VALUES (?, ?, ?, ?, ?, ?)`;
-        connection.query(insertSongQuery, [title, release_date, genre, duration, album, artistId], (err, result) => {
+        connection.query(insertSongQuery, [title, release_date, genre, album_name, album, artistId], (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to create song' });
             }
@@ -49,13 +49,13 @@ router.get('/:artistId', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-    const { title, release_date, genre, duration, album } = req.body;
+    const { title, release_date, genre, album_name, album } = req.body;
 
     const updateQuery = `UPDATE song 
-                         SET title = ?, release_date = ?, genre = ?, duration = ?, album = ? 
+                         SET title = ?, release_date = ?, genre = ?, album_name = ?, album = ? 
                          WHERE id = ?`;
 
-    connection.query(updateQuery, [title, release_date, genre, duration, album, req.params.id], (err, results) => {
+    connection.query(updateQuery, [title, release_date, genre, album_name, album, req.params.id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to update song' });
         }
