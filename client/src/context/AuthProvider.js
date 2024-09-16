@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { api } from '../services/axios';
 import { useNavigate } from 'react-router-dom';
 import { refreshToken } from '../services/refreshToken';
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
 
@@ -42,13 +43,13 @@ const AuthProvider = ({ children }) => {
             const { refreshToken, accessToken, role, message } = response.data;
             localStorage.setItem('refreshToken', refreshToken);
             setUser(() => ({ accessToken, role }))
-            alert(message)
+            toast.success(message)
             navigate(`/${RolesNavigate[role]}`)
 
         } catch (error) {
-            if (error?.response?.data?.error) { alert(error.response.data.error) }
+            if (error?.response?.data?.error) { toast.error(error.response.data.error) }
             else {
-                alert("Something Went Wrong")
+                toast.error("Something Went Wrong")
 
             }
         }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/axios';
+import { toast } from 'react-toastify';
 
 const useAxiosFetch = (url, refreshTrigger = null) => {
     const [data, setData] = useState(null);
@@ -22,7 +23,15 @@ const useAxiosFetch = (url, refreshTrigger = null) => {
         fetchData();
     }, [url, refreshTrigger]);
 
-    return { data, loading, error };
+    const insert = (insertData) => {
+        toast.info("Called")
+        setData((prev) => ({ ...prev, artists: [...prev.artists, ...insertData] }))
+    }
+
+    console.log("FecthData", data)
+
+
+    return { data, loading, error, insert };
 };
 
 export default useAxiosFetch;

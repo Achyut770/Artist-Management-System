@@ -1,25 +1,22 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import Button from './Button';
-import { editValidationSchema, registerValidationSchema } from '../auth/schemas';
+import { artistCommonSchema } from './schema';
+import Button from '../../common/Button';
 
-const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
+const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     const initialValues = initialValue || {
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: '',
-        phone: '',
+        name: '',
         dob: '',
         gender: 'm',
         address: '',
-        role: 'artist',
+        first_release_year: '',
+        no_of_albums_released: '',
     };
 
     const formik = useFormik({
         initialValues,
         enableReinitialize: true,
-        validationSchema: isEditMode ? editValidationSchema : registerValidationSchema,
+        validationSchema: artistCommonSchema,
         onSubmit: async (values) => {
             try {
                 await handleSubmit(values);
@@ -33,69 +30,15 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="form-group">
-                <label htmlFor="first_name">First Name</label>
+                <label htmlFor="name">Name</label>
                 <input
-                    id="first_name"
-                    name="first_name"
+                    id="name"
+                    name="name"
                     type="text"
-                    {...formik.getFieldProps('first_name')}
+                    {...formik.getFieldProps('name')}
                 />
-                {formik.touched.first_name && formik.errors.first_name ? (
-                    <div className="error-text">{formik.errors.first_name}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="last_name">Last Name</label>
-                <input
-                    id="last_name"
-                    name="last_name"
-                    type="text"
-                    {...formik.getFieldProps('last_name')}
-                />
-                {formik.touched.last_name && formik.errors.last_name ? (
-                    <div className="error-text">{formik.errors.last_name}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    {...formik.getFieldProps('email')}
-                />
-                {formik.touched.email && formik.errors.email ? (
-                    <div className="error-text">{formik.errors.email}</div>
-                ) : null}
-            </div>
-
-            {!isEditMode && (
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        {...formik.getFieldProps('password')}
-                    />
-                    {formik.touched.password && formik.errors.password ? (
-                        <div className="error-text">{formik.errors.password}</div>
-                    ) : null}
-                </div>
-            )}
-
-            <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    {...formik.getFieldProps('phone')}
-                />
-                {formik.touched.phone && formik.errors.phone ? (
-                    <div className="error-text">{formik.errors.phone}</div>
+                {formik.touched.name && formik.errors.name ? (
+                    <div className="error-text">{formik.errors.name}</div>
                 ) : null}
             </div>
 
@@ -165,14 +108,28 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
             </div>
 
             <div className="form-group">
-                <label htmlFor="role">Role</label>
-                <select id="role" name="role" {...formik.getFieldProps('role')}>
-                    <option value="super_admin">Super Admin</option>
-                    <option value="artist_manager">Artist Manager</option>
-                    <option value="artist">Artist</option>
-                </select>
-                {formik.touched.role && formik.errors.role ? (
-                    <div className="error-text">{formik.errors.role}</div>
+                <label htmlFor="first_release_year">First Release Year</label>
+                <input
+                    id="first_release_year"
+                    name="first_release_year"
+                    type="number"
+                    {...formik.getFieldProps('first_release_year')}
+                />
+                {formik.touched.first_release_year && formik.errors.first_release_year ? (
+                    <div className="error-text">{formik.errors.first_release_year}</div>
+                ) : null}
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="no_of_albums_released">Number of Albums Released</label>
+                <input
+                    id="no_of_albums_released"
+                    name="no_of_albums_released"
+                    type="number"
+                    {...formik.getFieldProps('no_of_albums_released')}
+                />
+                {formik.touched.no_of_albums_released && formik.errors.no_of_albums_released ? (
+                    <div className="error-text">{formik.errors.no_of_albums_released}</div>
                 ) : null}
             </div>
 
@@ -183,4 +140,4 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     );
 };
 
-export default UserForm;
+export default ArtistForm;

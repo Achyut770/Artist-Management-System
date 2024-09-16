@@ -5,8 +5,8 @@ import useAxiosPrivate from '../hooks/usePrivateAxios';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import PageLayout from '../components/dashboard/PageLayout';
-import Table from '../components/dashboard/Table';
 import { toast } from 'react-toastify';
+import Table from '../components/dashboard/Table';
 
 export const userHeadings = [
     { key: 'first_name', label: 'First Name' },
@@ -34,13 +34,19 @@ const User = () => {
 
     const deleteUser = async (id) => {
         try {
-            await axiosPrivate.delete(`auth/delete/${id}`);
-            toast.success("Deleted");
+            const res = await axiosPrivate.delete(`auth/delete/${id}`);
+            toast.success(res.data.message);
             setRefetch(!refetch);
         } catch (error) {
-            toast.error("Cannot Delete");
+            if (error?.response?.data?.error) { toast.error(error.response.data.error) }
+            else {
+                toast.error("Something Went Wrong")
+
+            }
         }
     };
+    console.log("Data", data)
+
 
     return (
         <PageLayout title={"Users"}>
@@ -48,7 +54,7 @@ const User = () => {
             {loading && <p>...Loading...</p>}
             {data && (
                 <div>
-                    <Table userHeadings={userHeadings} data={data.data} deleteData={deleteUser} />
+                    <Table headings={userHeadings} data={data.data} deleteData={deleteUser} />
                     <Pagination handlePageClick={handlePageClick} totalPages={data.totalPages} />
                 </div>
             )}

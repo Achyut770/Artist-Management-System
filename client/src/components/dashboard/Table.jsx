@@ -1,15 +1,15 @@
 import React from 'react';
-import "../styles/table.css";
+import "./styles/table.css";
 import UserRow from './userRow';
 
 
-const Table = ({ userHeadings, data, deleteData }) => {
+const Table = ({ headings, data, deleteData }) => {
 
     return (
         <table className="table">
             <thead>
                 <tr>
-                    {userHeadings.map((item) => {
+                    {headings.map((item) => {
                         return <th key={item.key}>{item.label}</th>
                     })}
                     <th>Action</th>
@@ -17,7 +17,7 @@ const Table = ({ userHeadings, data, deleteData }) => {
             </thead>
             <tbody>
                 {data.map(user => (
-                    <UserRow userHeadings={userHeadings} deleteData={deleteData} user={user} />
+                    <UserRow headings={headings} deleteData={deleteData} user={user} />
                 ))}
 
             </tbody>

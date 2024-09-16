@@ -38,8 +38,11 @@ router.get('/', (req, res) => {
             }
 
             const total = countResult[0].total;
+            const totalPages = Math.ceil(total / parseInt(limit, 10));
+
             res.status(200).json({
                 total,
+                totalPages,
                 page: parseInt(page, 10),
                 pageSize: results.length,
                 artists: results,
@@ -48,8 +51,10 @@ router.get('/', (req, res) => {
     });
 });
 
+
 router.get('/:id', (req, res) => {
     const query = `SELECT * FROM artist WHERE id = ?`;
+    console.log("Id", req.params.id)
 
     connection.query(query, [req.params.id], (err, results) => {
         if (err) {
@@ -62,7 +67,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', checkArtistManager, (req, res) => {
+router.put('/edit/:id', checkArtistManager, (req, res) => {
     const { name, dob, gender, address, first_release_year, no_of_albums_released } = req.body;
 
     const query = `UPDATE artist 

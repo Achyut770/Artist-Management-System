@@ -1,0 +1,35 @@
+input[type="file"] {
+    display: none;
+}
+
+.importExpostContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.importExpostContainer button,
+.buttonImport {
+    padding: 10px 25px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.importExpostContainer button:hover,
+.buttonImport:hover {
+    transform: translateY(-2px);
+}
+
+.importExpostContainer button:focus,
+.buttonImport:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}

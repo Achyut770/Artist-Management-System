@@ -7,7 +7,7 @@ export const checkAdmin = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
+        return res.status(403).json({ error: 'No token provided' });
     }
 
     jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {

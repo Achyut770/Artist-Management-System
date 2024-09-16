@@ -3,7 +3,7 @@ import { MdDelete, MdEdit } from 'react-icons/md';
 import { FaSpinner } from "react-icons/fa6";
 import { Link, useLocation } from 'react-router-dom';
 
-const UserRow = ({ user, userHeadings, deleteData }) => {
+const UserRow = ({ user, headings, deleteData }) => {
     const { pathname } = useLocation()
     const [deleteLoading, setDeleteLoading] = useState(false)
     const deletes = async (id) => {
@@ -13,7 +13,7 @@ const UserRow = ({ user, userHeadings, deleteData }) => {
     }
     return (
         <tr>
-            {userHeadings.map(heading => (
+            {headings.map(heading => (
                 <td key={heading.key} data-label={heading.key}>
                     {user[heading.key]}
                 </td>

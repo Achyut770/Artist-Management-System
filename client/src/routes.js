@@ -9,6 +9,7 @@ import AddUser from './pages/AddUser';
 import ProtectedRoute from './components/dashboard/ProtectedRoutes';
 import EditUser from './pages/EditUser';
 import ArtistAdd from './pages/ArtistAdd';
+import EditArtist from './pages/EditArtist';
 
 const Router = () => {
     return (
@@ -23,11 +24,13 @@ const Router = () => {
             </Route>
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'artist_manager']} />}>
                 <Route path="/artist" element={<Artist />} />
-                <Route path="/artist/add" element={<ArtistAdd />} />
-                <Route path="/artist/edit/:artistId" element={<Artist />} />
-                <Route path="/artist/:artistId/songs" element={<Song />} />
-
             </Route>
+            <Route element={<ProtectedRoute allowedRoles={['artist_manager']} />}>
+                <Route path="/artist/add" element={<ArtistAdd />} />
+                <Route path="/artist/edit/:artistId" element={<EditArtist />} />
+                <Route path="/artist/:artistId/songs" element={<Song />} />
+            </Route>
+
             <Route element={<ProtectedRoute allowedRoles={['super_admin', 'artist_manager', "artist"]} />}>
                 <Route path="/song/:artistId" element={<Song />} />
                 <Route path="/song/:artistId/:songId" element={<Song />} />
