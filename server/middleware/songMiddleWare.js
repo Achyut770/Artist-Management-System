@@ -1,21 +1,15 @@
-import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET } from '../config.js';
+import { verifyToken } from '../utils/utils.js';
 
 export const checkSongOwnership = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const { decoded, error } = verifyToken(req, res);
+    if (error) return error;
 
-    if (!token) return res.status(401).json({ error: 'No token provided' });
+    const tokenUserId = decoded.userId;
+    const paramUserId = req.params.id;
 
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) return res.status(401).json({ error: 'Failed to authenticate token' });
+    if (tokenUserId !== paramUserId) {
+        return res.status(403).json({ error: 'Access denied. Not authorized to perform this action' });
+    }
 
-        const tokenUserId = decoded.userId;
-        const paramUserId = req.params.id;
-
-        if (tokenUserId !== paramUserId) {
-            return res.status(403).json({ error: 'Access denied. Not authorized to perform this action' });
-        }
-
-        next();
-    });
+    next();
 };

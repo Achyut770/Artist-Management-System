@@ -1,9 +1,13 @@
 import React from 'react';
 import RegisterForm from '../components/auth/RegisterForm';
-import './styles/register.css';
-import { Link } from 'react-router-dom';
+import './styles/auth.css';
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { RolesNavigate } from '../context/AuthProvider';
 
 const Register = () => {
+    const { user } = useAuth()
+    if (user) return <Navigate to={`/${RolesNavigate[user.role]}`} replace />
     return (
         <div className="auth_container">
             <div className='auth_card'>

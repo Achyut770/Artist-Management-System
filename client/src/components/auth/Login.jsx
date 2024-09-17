@@ -1,9 +1,9 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import './styles/auth.css';
-import { useAuth } from "../../context/AuthProvider.js"
 import { loginValidationSchema } from './schemas.js';
 import Button from '../common/Button.jsx';
+import { useAuth } from '../../hooks/useAuth.js';
 
 const LoginForm = () => {
     const { login } = useAuth();
@@ -15,11 +15,7 @@ const LoginForm = () => {
         },
         validationSchema: loginValidationSchema,
         onSubmit: async (values) => {
-            try {
-                await login(values);
-            } catch (error) {
-                console.error('Login failed:', error);
-            }
+            await login(values);
         },
     });
 

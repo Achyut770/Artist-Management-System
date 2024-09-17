@@ -3,15 +3,15 @@ import ReactPaginate from 'react-paginate';
 import './styles/pagination.css';
 
 const Pagination = ({ handlePageClick, totalPages }) => {
+    console.log("Pagination Called")
     return (
         <ReactPaginate
             breakLabel="..."
-            nextLabel="Next >"
+            nextLabel="Next "
             onPageChange={handlePageClick}
             pageRangeDisplayed={5}
-            pageCount={totalPages}
-            previousLabel="< Previous"
-            renderOnZeroPageCount={null}
+            pageCount={totalPages || 1}
+            previousLabel={`Previous`}
             containerClassName="pagination"
             pageClassName="page-item"
             pageLinkClassName="page-link"
@@ -21,10 +21,10 @@ const Pagination = ({ handlePageClick, totalPages }) => {
             nextLinkClassName="page-link"
             breakClassName="page-item"
             breakLinkClassName="page-link"
-            activeClassName="active"
+            activeLinkClassName="active_pagination"
             disabledClassName="disabled"
         />
     );
 };
 
-export default Pagination;
+export default React.memo(Pagination);

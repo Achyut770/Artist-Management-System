@@ -5,18 +5,18 @@
     width: 100vw;
     height: 100vh;
     background-color: #f0f4f8;
-    padding: 40px;
     overflow: auto;
-
+    padding-block: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 44;
 }
 
 .auth_card {
     background: #ffffff;
     border-radius: 8px;
-    padding: 2rem;
+    padding: max(2vw, 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: min(500px, 97%);
     margin: auto;

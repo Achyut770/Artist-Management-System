@@ -4,10 +4,8 @@ import { GiFishingNet, GiMusicSpell } from "react-icons/gi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink, useLocation } from 'react-router-dom';
 import "./styles/navbar.css";
-import { useAuth } from '../../context/AuthProvider';
 import { MdLogout } from 'react-icons/md';
-
-
+import { useAuth } from '../../hooks/useAuth';
 
 
 const Navbar = () => {

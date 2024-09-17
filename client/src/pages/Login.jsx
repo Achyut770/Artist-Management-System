@@ -1,8 +1,9 @@
 import React from 'react';
-import './styles/login.css';
+import './styles/auth.css';
 import LoginForm from '../components/auth/Login';
 import { Link, Navigate } from 'react-router-dom';
-import { RolesNavigate, useAuth } from '../context/AuthProvider';
+import { RolesNavigate } from '../context/AuthProvider';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginPage = () => {
     const { user } = useAuth()

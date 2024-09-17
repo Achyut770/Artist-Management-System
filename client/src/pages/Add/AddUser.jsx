@@ -1,7 +1,7 @@
 import React from 'react'
-import RegisterForm from '../components/auth/RegisterForm'
-import "./styles/addUser.css"
-import PageLayout from '../components/dashboard/PageLayout'
+import RegisterForm from '../../components/auth/RegisterForm'
+import "../styles/addUser.css"
+import PageLayout from '../../components/common/PageLayout'
 
 const AddUser = () => {
     return (

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import PageLayout from '../components/dashboard/PageLayout'
-import { Link } from 'react-router-dom'
-import { MdAdd } from 'react-icons/md'
-import useAxiosFetch from '../hooks/fetchs'
-import { useAuth } from '../context/AuthProvider'
-import Table from '../components/dashboard/Table'
-import Pagination from '../components/dashboard/Pagination'
-import useAxiosPrivate from '../hooks/usePrivateAxios'
-import { toast } from 'react-toastify'
-import ImportExportCsv from '../components/dashboard/Artist/InmportExportCsv'
+import React, { useState } from 'react';
+import { MdAdd } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import PageLayout from '../components/common/PageLayout';
+import Pagination from '../components/common/Pagination';
+import Table from '../components/common/Table';
+import ImportExportCsv from '../components/dashboard/Artist/InmportExportCsv';
+import useAxiosFetch from '../hooks/useFetch';
+import { useAuth } from '../hooks/useAuth';
+import useAxiosPrivate from '../hooks/usePrivateAxios';
+import { useDelete } from '../hooks/useDelete';
+import { toast } from 'react-toastify';
 
 const artistHeadings = [
     { key: 'name', label: 'Name' },
@@ -18,44 +19,40 @@ const artistHeadings = [
     { key: 'first_release_year', label: 'First Release Year' },
     { key: 'no_of_albums_released', label: 'Number of Albums Released' },
 ];
+
 const Artist = () => {
+
     const [refetch, setRefetch] = useState(false);
-    const { user } = useAuth()
     const [page, setPage] = useState(0);
-    const { data, loading, insert } = useAxiosFetch(`artist?page=${page + 1}&pageSize=10`, refetch);
-
-
+    const { user } = useAuth();
+    const { data, loading } = useAxiosFetch(`artist?page=${page + 1}&limit=5`, refetch);
     const axiosPrivate = useAxiosPrivate();
+    const { deleteItem } = useDelete(axiosPrivate, 'artist', setRefetch);
 
-    const handlePageClick = (e) => {
-        setPage(() => e.selected);
+    const handlePageClick = (event) => {
+        setPage(event.selected);
     };
 
-    const deleteArtist = async (id) => {
+    const addBulk = async (artists) => {
         try {
-            const res = await axiosPrivate.delete(`artist/${id}`);
+            const res = await axiosPrivate.post("/artist/bulk_register", { artists });
             toast.success(res.data.message);
-            setRefetch(!refetch);
+            setRefetch((prev) => !prev);
         } catch (error) {
-            if (error?.response?.data?.error) { toast.error(error.response.data.error) }
-            else {
-                toast.error("Something Went Wrong")
-
-            }
+            toast.error("Something went wrong");
         }
     };
 
-
+    const isArtistManager = user.role === "artist_manager";
 
     return (
         <PageLayout title={"Artist"}>
-            {!loading && <ImportExportCsv data={data.artists} onImport={insert} fileName={"artist"} />}
-            {user.role === "artist_manager" && <Link to="/artist/add" className='addButton'> <MdAdd /> Add</Link>}
-            {loading ? <div>Loading...</div> : <>
+            {isArtistManager && <ImportExportCsv data={data?.artists} onImport={addBulk} fileName={"artist"} />}
+            {isArtistManager && <Link to="/artist/add" className='addButton'><MdAdd /> Add</Link>}
+            <Table headings={artistHeadings} data={data?.artists} deleteData={deleteItem} action={isArtistManager} loading={loading} redirect />
+            <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />
+        </PageLayout>
+    );
+};
 
-                <Table headings={artistHeadings} data={data.artists} deleteData={deleteArtist} />
-                <Pagination handlePageClick={handlePageClick} totalPages={data.totalPages} /></>}
-        </PageLayout>)
-}
-
-export default Artist
+export default Artist;

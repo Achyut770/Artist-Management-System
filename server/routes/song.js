@@ -1,12 +1,14 @@
 import express from 'express';
 import connection from '../db.js';
+import { checkSongOwnership } from '../middleware/songMiddleWare.js';
+import { checkArtistManager } from '../middleware/artistMiddleware.js';
 
 const router = express.Router();
 
 router.use(express.json());
 
-router.post('/:artistId', (req, res) => {
-    const { title, release_date, genre, album_name, album } = req.body;
+router.post('/:artistId', checkArtistManager, (req, res) => {
+    const { title, genre, album_name } = req.body;
     const { artistId } = req.params;
 
     const checkArtistQuery = 'SELECT * FROM artist WHERE id = ?';
@@ -18,10 +20,11 @@ router.post('/:artistId', (req, res) => {
             return res.status(404).json({ error: 'Artist not found' });
         }
 
-        const insertSongQuery = `INSERT INTO song (title, release_date, genre, album_name, album, artist_id) 
-                                 VALUES (?, ?, ?, ?, ?, ?)`;
-        connection.query(insertSongQuery, [title, release_date, genre, album_name, album, artistId], (err, result) => {
+        const insertSongQuery = `INSERT INTO song (title, genre, album_name, artist_id) 
+                                 VALUES (?, ?, ?, ?)`;
+        connection.query(insertSongQuery, [title, genre, album_name, artistId], (err, result) => {
             if (err) {
+                console.log("Error", err)
                 return res.status(500).json({ error: 'Failed to create song' });
             }
             res.status(201).json({ message: 'Song created successfully', songId: result.insertId });
@@ -29,33 +32,74 @@ router.post('/:artistId', (req, res) => {
     });
 });
 
-router.get('/:artistId', (req, res) => {
-    const { artistId } = req.params;
+router.get('/single_song/:id', (req, res) => {
+    const { id } = req.params;
 
     const query = `SELECT song.*, artist.name as artist_name 
                    FROM song 
                    JOIN artist ON song.artist_id = artist.id 
-                   WHERE artist_id = ?`;
+                   WHERE song.id = ?`;
 
-    connection.query(query, [artistId], (err, songs) => {
+    connection.query(query, [id], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Failed to fetch songs' });
+            return res.status(500).json({ error: 'Failed to fetch song' });
         }
-        if (songs.length === 0) {
-            return res.status(404).json({ error: 'No songs found for this artist' });
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Song not found' });
         }
-        res.status(200).json(songs);
+        res.status(200).json(results[0]);
     });
 });
 
-router.put('/:id', (req, res) => {
-    const { title, release_date, genre, album_name, album } = req.body;
+router.get('/:artistId', (req, res) => {
+    const { artistId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    const query = `SELECT song.*, artist.name as artist_name 
+                   FROM song 
+                   JOIN artist ON song.artist_id = artist.id 
+                   WHERE artist_id = ?
+                   LIMIT ? OFFSET ?`;
+
+    connection.query(query, [artistId, parseInt(limit, 10), offset], (err, songs) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to fetch songs' });
+        }
+
+        if (songs.length === 0) {
+            return res.status(404).json({ error: 'No songs found for this artist' });
+        }
+
+        const countQuery = 'SELECT COUNT(*) AS total FROM song WHERE artist_id = ?';
+        connection.query(countQuery, [artistId], (err, countResult) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to count songs' });
+            }
+
+            const total = countResult[0].total;
+            const totalPages = Math.ceil(total / parseInt(limit, 10));
+
+            res.status(200).json({
+                total,
+                totalPages,
+                page: parseInt(page, 10),
+                pageSize: songs.length,
+                songs
+            });
+        });
+    });
+});
+
+
+router.put('/:id', checkArtistManager, (req, res) => {
+    const { title, genre, album_name } = req.body;
 
     const updateQuery = `UPDATE song 
-                         SET title = ?, release_date = ?, genre = ?, album_name = ?, album = ? 
+                         SET title = ?, genre = ?, album_name = ? 
                          WHERE id = ?`;
 
-    connection.query(updateQuery, [title, release_date, genre, album_name, album, req.params.id], (err, results) => {
+    connection.query(updateQuery, [title, genre, album_name, req.params.id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to update song' });
         }
@@ -66,7 +110,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkArtistManager, (req, res) => {
     const deleteQuery = `DELETE FROM song WHERE id = ?`;
 
     connection.query(deleteQuery, [req.params.id], (err, results) => {

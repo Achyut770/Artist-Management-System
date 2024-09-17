@@ -21,6 +21,34 @@ router.post('/register', checkArtistManager, (req, res) => {
     });
 });
 
+router.post('/bulk_register', checkArtistManager, (req, res) => {
+    const artists = req.body.artists;
+
+    if (!artists || !Array.isArray(artists) || artists.length === 0) {
+        return res.status(400).json({ error: 'Invalid or empty artists array' });
+    }
+
+    const query = `INSERT INTO artist (name, dob, gender, address, first_release_year, no_of_albums_released)
+                   VALUES ?`;
+
+    const artistValues = artists.map(artist => [
+        artist.name,
+        artist.dob,
+        artist.gender,
+        artist.address,
+        artist.first_release_year,
+        artist.no_of_albums_released
+    ]);
+
+    connection.query(query, [artistValues], (err, results) => {
+        if (err) {
+            console.log("Error", err);
+            return res.status(500).json({ error: 'Failed to create artists in bulk' });
+        }
+        res.status(201).json({ message: 'Artists created successfully', affectedRows: results.affectedRows });
+    });
+});
+
 router.get('/', (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
@@ -89,6 +117,7 @@ router.delete('/:id', checkArtistManager, (req, res) => {
     const query = `DELETE FROM artist WHERE id = ?`;
 
     connection.query(query, [req.params.id], (err, results) => {
+        console.log("error", err)
         if (err) {
             return res.status(500).json({ error: 'Failed to delete artist' });
         }

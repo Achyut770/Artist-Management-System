@@ -6,7 +6,6 @@ input[type="file"] {
     display: flex;
     flex-direction: row;
     gap: 20px;
-    align-items: center;
 }
 
 .importExpostContainer button,
@@ -32,4 +31,28 @@ input[type="file"] {
 .buttonImport:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .importExpostContainer {
+        gap: 15px;
+    }
+
+    .importExpostContainer button,
+    .buttonImport {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .importExpostContainer {
+        gap: 10px;
+    }
+
+    .importExpostContainer button,
+    .buttonImport {
+        padding: 6px 15px;
+        font-size: 12px;
+    }
 }

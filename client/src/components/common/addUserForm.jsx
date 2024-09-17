@@ -14,6 +14,7 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         gender: 'm',
         address: '',
         role: 'artist',
+        confirm_password: ""
     };
 
     const formik = useFormik({
@@ -72,18 +73,34 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
             </div>
 
             {!isEditMode && (
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        {...formik.getFieldProps('password')}
-                    />
-                    {formik.touched.password && formik.errors.password ? (
-                        <div className="error-text">{formik.errors.password}</div>
-                    ) : null}
-                </div>
+                <>
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            {...formik.getFieldProps('password')}
+                        />
+                        {formik.touched.password && formik.errors.password ? (
+                            <div className="error-text">{formik.errors.password}</div>
+                        ) : null}
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="confirm_password">Confirm Password</label>
+                        <input
+                            id="confirm_password"
+                            name="confirm_password"
+                            type="password"
+                            {...formik.getFieldProps('confirm_password')}
+                        />
+                        {formik.touched.confirm_password && formik.errors.confirm_password ? (
+                            <div className="error-text">{formik.errors.confirm_password}</div>
+                        ) : null}
+                    </div>
+                </>
+
             )}
 
             <div className="form-group">

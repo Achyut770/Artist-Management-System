@@ -3,6 +3,7 @@ import { api } from '../services/axios';
 import { useNavigate } from 'react-router-dom';
 import { refreshToken } from '../services/refreshToken';
 import { toast } from 'react-toastify';
+import { errorMessage } from '../services/errorMessage';
 
 export const AuthContext = createContext();
 
@@ -19,7 +20,6 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-
             try {
                 const response = await api.post('auth/get-user', { refreshToken });
                 if (response.status !== 200) {
@@ -44,21 +44,19 @@ const AuthProvider = ({ children }) => {
             localStorage.setItem('refreshToken', refreshToken);
             setUser(() => ({ accessToken, role }))
             toast.success(message)
-            navigate(`/${RolesNavigate[role]}`)
+            navigate(`/${RolesNavigate[role]}`, { replace: true })
 
         } catch (error) {
-            if (error?.response?.data?.error) { toast.error(error.response.data.error) }
-            else {
-                toast.error("Something Went Wrong")
+            toast.error(errorMessage(error))
 
-            }
         }
     };
 
     const logout = () => {
         localStorage.removeItem('refreshToken');
-        navigate("/login")
         setUser(null);
+        navigate("/login", { replace: true })
+
     };
 
     const value = { user, login, logout, loading, setUser };
@@ -71,4 +69,3 @@ const AuthProvider = ({ children }) => {
 export default AuthProvider;
 
 
-export const useAuth = () => useContext(AuthContext)

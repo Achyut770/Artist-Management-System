@@ -1,0 +1,28 @@
+.loader_user {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: 44;
+    background-color: white;
+}
+
+.spinner_user {
+    color: var(--primary-color);
+    font-size: 2rem;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

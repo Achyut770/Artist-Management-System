@@ -15,6 +15,7 @@ const ImportExportCsv = ({ onImport, fileName, data = [] }) => {
 
             fileReader.readAsText(file);
         }
+        e.target.value = ""
     };
 
     const csvFileToArray = (string) => {

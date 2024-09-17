@@ -5,11 +5,14 @@ import Register from './pages/Register';
 import Artist from './pages/Artist';
 import Song from './pages/Song';
 import User from './pages/User';
-import AddUser from './pages/AddUser';
-import ProtectedRoute from './components/dashboard/ProtectedRoutes';
-import EditUser from './pages/EditUser';
-import ArtistAdd from './pages/ArtistAdd';
-import EditArtist from './pages/EditArtist';
+import NotFound from './components/common/NotFound';
+import ProtectedRoute from './components/common/ProtectedRoutes';
+import EditArtist from './pages/Edit/EditArtist';
+import EditSong from './pages/Edit/EditSong';
+import EditUser from './pages/Edit/EditUser';
+import AddArtist from './pages/Add/AddArtist';
+import AddUser from './pages/Add/AddUser';
+import AddSong from './pages/Add/AddSong';
 
 const Router = () => {
     return (
@@ -26,16 +29,17 @@ const Router = () => {
                 <Route path="/artist" element={<Artist />} />
             </Route>
             <Route element={<ProtectedRoute allowedRoles={['artist_manager']} />}>
-                <Route path="/artist/add" element={<ArtistAdd />} />
+                <Route path="/artist/add" element={<AddArtist />} />
                 <Route path="/artist/edit/:artistId" element={<EditArtist />} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={['artist_manager', 'super_admin', "artist"]} />}>
                 <Route path="/artist/:artistId/songs" element={<Song />} />
-            </Route>
+                <Route path="/artist/:artistId/songs/edit/:songId" element={<EditSong />} />
+                <Route path="/artist/:artistId/songs/add" element={<AddSong />} />
+            </ Route>
+            <Route path="/not-found" element={<NotFound />} />
 
-            <Route element={<ProtectedRoute allowedRoles={['super_admin', 'artist_manager', "artist"]} />}>
-                <Route path="/song/:artistId" element={<Song />} />
-                <Route path="/song/:artistId/:songId" element={<Song />} />
-            </Route>
-            <Route path="*" element={<div>Cannnot Find the page</div>} />
+            <Route path="*" element={<NotFound />} />
 
         </Routes>
     );

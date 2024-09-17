@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import useAxiosFetch from '../hooks/fetchs';
-import Pagination from '../components/dashboard/Pagination'
+import useAxiosFetch from '../hooks/useFetch';
+import Pagination from '../components/common/Pagination'
 import useAxiosPrivate from '../hooks/usePrivateAxios';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import PageLayout from '../components/dashboard/PageLayout';
+import PageLayout from '../components/common/PageLayout';
 import { toast } from 'react-toastify';
-import Table from '../components/dashboard/Table';
+import Table from '../components/common/Table';
+import { errorMessage } from '../services/errorMessage';
 
 export const userHeadings = [
     { key: 'first_name', label: 'First Name' },
@@ -38,26 +39,16 @@ const User = () => {
             toast.success(res.data.message);
             setRefetch(!refetch);
         } catch (error) {
-            if (error?.response?.data?.error) { toast.error(error.response.data.error) }
-            else {
-                toast.error("Something Went Wrong")
+            toast.error(errorMessage(error))
 
-            }
         }
     };
-    console.log("Data", data)
-
 
     return (
         <PageLayout title={"Users"}>
             <Link to="/users/add" className='addButton'> <MdAdd /> Add</Link>
-            {loading && <p>...Loading...</p>}
-            {data && (
-                <div>
-                    <Table headings={userHeadings} data={data.data} deleteData={deleteUser} />
-                    <Pagination handlePageClick={handlePageClick} totalPages={data.totalPages} />
-                </div>
-            )}
+            <Table headings={userHeadings} data={data?.data} deleteData={deleteUser} loading={loading} />
+            <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />
         </PageLayout>
     );
 };

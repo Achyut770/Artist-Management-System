@@ -1,13 +1,15 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { RolesNavigate, useAuth } from '../../context/AuthProvider';
+import { RolesNavigate } from '../../context/AuthProvider';
+import Loader from './Loader';
+import { useAuth } from '../../hooks/useAuth';
 
 const ProtectedRoute = ({ allowedRoles }) => {
     const { user, loading } = useAuth();
     const location = useLocation();
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     if (!user) {

@@ -31,7 +31,10 @@ const baseSchema = {
 
 export const registerValidationSchema = Yup.object({
     ...baseSchema,
-    password: passwordSchema
+    password: passwordSchema,
+    confirm_password: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('Confirm password is required'),
 });
 
 export const editValidationSchema = Yup.object(baseSchema);

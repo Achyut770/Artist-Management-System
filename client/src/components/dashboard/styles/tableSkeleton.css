@@ -1,0 +1,45 @@
+.loading {
+    position: relative;
+}
+
+.pulse {
+    background-color: #e7e7e7;
+    height: 14px;
+    border-radius: 7px;
+    width: 50%;
+    padding: 10px 20px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #e7e7e7;
+    }
+
+    50% {
+        background-color: #e5e1e1;
+    }
+
+    100% {
+        background-color: #e9e6e6;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .table-skeleton td::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 70px;
+        height: 20px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+        background-color: #4CAF50;
+    }
+
+
+
+}
