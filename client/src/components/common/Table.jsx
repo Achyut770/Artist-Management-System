@@ -15,13 +15,14 @@ const Table = ({ headings, data, deleteData, redirect = false, action = true, lo
                     {headings.map((item) => (
                         <th key={item.key}>{item.label}</th>
                     ))}
-                    {<th>Action</th>
-                    }                </tr>
+                    <th>Action</th>
+                </tr>
             </thead>
             <tbody>
                 {data && data.length > 0 ? (
                     data.map(user => (
                         <UserRow
+                            key={user.id}
                             headings={headings}
                             deleteData={deleteData}
                             user={user}

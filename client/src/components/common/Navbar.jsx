@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { FaPersonShelter, FaUserGroup } from "react-icons/fa6";
 import { GiFishingNet, GiMusicSpell } from "react-icons/gi";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { NavLink, useLocation } from 'react-router-dom';
-import "./styles/navbar.css";
 import { MdLogout } from 'react-icons/md';
+import { RxHamburgerMenu } from "react-icons/rx";
+import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import "./styles/navbar.css";
 
 
 const Navbar = () => {
     const [res, setRes] = useState(false)
-    const { pathname } = useLocation()
     const { user, logout } = useAuth()
 
     const navLinks = [
@@ -47,13 +46,12 @@ const Navbar = () => {
             </div>
             {
                 navLinks.map((items, id) => {
-                    return <>{
-                        items.role.includes(user?.role) ? <NavLink key={items.name} to={items.to} className="indvLinks navLinks">
-                            <span className='icon'>{items.link}</span>
-                            <span className='linkName'>{items.name}</span>
-                        </NavLink> : null
-                    }
-                    </>
+                    return items.role.includes(user?.role) ? <NavLink key={id} to={items.to} className="indvLinks navLinks">
+                        <span className='icon'>{items.link}</span>
+                        <span className='linkName'>{items.name}</span>
+                    </NavLink> : null
+
+
                 })
             }
             <div className='indvLinks navLinks' onClick={() => logout()} >

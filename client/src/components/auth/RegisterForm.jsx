@@ -15,9 +15,6 @@ const RegisterForm = () => {
             navigate("/login")
         } catch (error) {
             toast.error(error?.response?.data?.message)
-            console.log("Error", error)
-            throw error
-
         }
     }
     return (

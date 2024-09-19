@@ -3,7 +3,6 @@ import ReactPaginate from 'react-paginate';
 import './styles/pagination.css';
 
 const Pagination = ({ handlePageClick, totalPages }) => {
-    console.log("Pagination Called")
     return (
         <ReactPaginate
             breakLabel="..."

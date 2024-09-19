@@ -4,6 +4,7 @@ import "./styles/importexport.css";
 
 const ImportExportCsv = ({ onImport, fileName, data = [] }) => {
     const fileReader = new FileReader();
+    console.log("Import Export Called")
 
     const handleOnChange = (e) => {
         const file = e.target.files[0];
@@ -86,4 +87,4 @@ const ImportExportCsv = ({ onImport, fileName, data = [] }) => {
     );
 };
 
-export default ImportExportCsv;
+export default React.memo(ImportExportCsv);

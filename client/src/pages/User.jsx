@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import CustomTitle from '../components/common/CustomTitle';
@@ -19,22 +19,24 @@ export const userHeadings = [
     { key: 'role', label: 'Role' },
 ];
 
-
 const User = () => {
     const [page, setPage] = useState(0);
     const [refetch, setRefetch] = useState(false);
 
-    const { data, loading, error } = useAxiosFetch(`auth?page=${page + 1}&pageSize=10`, refetch);
+    const { data, loading } = useAxiosFetch(`auth?page=${page + 1}&pageSize=10`, refetch);
 
-    const handlePageClick = (e) => {
-        setPage(() => e.selected);
-    };
-    const { deleteItem: deleteUser } = useDelete("auth/delete", setRefetch)
+    const handlePageClick = useCallback((e) => {
+        setPage(e.selected);
+    }, []);
+
+    const { deleteItem: deleteUser } = useDelete("auth/delete", setRefetch);
 
     return (
         <PageLayout title={"Users"}>
             <CustomTitle title={"Users"} />
-            <Link to="/users/add" className='addButton'> <MdAdd /> Add</Link>
+            <Link to="/users/add" className='addButton'>
+                <MdAdd /> Add
+            </Link>
             <Table headings={userHeadings} data={data?.data} deleteData={deleteUser} loading={loading} />
             <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />
         </PageLayout>

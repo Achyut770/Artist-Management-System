@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import PageLayout from '../components/common/PageLayout';
@@ -22,14 +22,13 @@ const Song = () => {
     const [refetch, setRefetch] = useState(false);
     const { artistId } = useParams();
     const { user } = useAuth();
-    const axiosPrivate = useAxiosPrivate();
     const { pathname } = useLocation();
     const { data, loading } = useAxiosFetch(`song/${artistId}/?page=${page + 1}&limit=5`, refetch);
-    const { deleteItem } = useDelete(axiosPrivate, 'song', setRefetch);
+    const { deleteItem } = useDelete('song', setRefetch);
 
-    const handlePageClick = (event) => {
+    const handlePageClick = useCallback((event) => {
         setPage(event.selected);
-    };
+    }, []);
 
     const isArtistManager = user.role === "artist_manager";
 
@@ -37,7 +36,11 @@ const Song = () => {
         <PageLayout title={"Songs"}>
             <CustomTitle title={"Songs"} />
 
-            {isArtistManager && <Link to={`${pathname}/add`} className='addButton'><MdAdd /> Add</Link>}
+            {isArtistManager && (
+                <Link to={`${pathname}/add`} className='addButton'>
+                    <MdAdd /> Add
+                </Link>
+            )}
             <Table headings={songHeadings} data={data?.songs} deleteData={deleteItem} action={isArtistManager} loading={loading} />
             <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />
         </PageLayout>

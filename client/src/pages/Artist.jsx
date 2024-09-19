@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import CustomTitle from '../components/common/CustomTitle';
 import PageLayout from '../components/common/PageLayout';
 import Pagination from '../components/common/Pagination';
 import Table from '../components/common/Table';
 import ImportExportCsv from '../components/dashboard/Artist/InmportExportCsv';
-import useAxiosFetch from '../hooks/useFetch';
+import useAddEntity from '../hooks/useAddEntity';
 import { useAuth } from '../hooks/useAuth';
-import useAxiosPrivate from '../hooks/usePrivateAxios';
 import { useDelete } from '../hooks/useDelete';
-import { toast } from 'react-toastify';
-import CustomTitle from '../components/common/CustomTitle';
+import useAxiosFetch from '../hooks/useFetch';
 
 const artistHeadings = [
     { key: 'name', label: 'Name' },
@@ -22,27 +21,21 @@ const artistHeadings = [
 ];
 
 const Artist = () => {
-
     const [refetch, setRefetch] = useState(false);
     const [page, setPage] = useState(0);
     const { user } = useAuth();
     const { data, loading } = useAxiosFetch(`artist?page=${page + 1}&limit=5`, refetch);
-    const axiosPrivate = useAxiosPrivate();
     const { deleteItem } = useDelete('artist', setRefetch);
+    const addBulkArtist = useAddEntity("/artist/bulk_register",)
 
-    const handlePageClick = (event) => {
+    const handlePageClick = useCallback((event) => {
         setPage(event.selected);
-    };
+    }, []);
 
-    const addBulk = async (artists) => {
-        try {
-            const res = await axiosPrivate.post("/artist/bulk_register", { artists });
-            toast.success(res.data.message);
-            setRefetch((prev) => !prev);
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
-    };
+    const addBulk = useCallback(async (artists) => {
+        addBulkArtist({ artists })
+        setRefetch((prev) => !prev)
+    }, []);
 
     const isArtistManager = user.role === "artist_manager";
 
