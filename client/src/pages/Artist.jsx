@@ -10,6 +10,7 @@ import { useAuth } from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/usePrivateAxios';
 import { useDelete } from '../hooks/useDelete';
 import { toast } from 'react-toastify';
+import CustomTitle from '../components/common/CustomTitle';
 
 const artistHeadings = [
     { key: 'name', label: 'Name' },
@@ -27,7 +28,7 @@ const Artist = () => {
     const { user } = useAuth();
     const { data, loading } = useAxiosFetch(`artist?page=${page + 1}&limit=5`, refetch);
     const axiosPrivate = useAxiosPrivate();
-    const { deleteItem } = useDelete(axiosPrivate, 'artist', setRefetch);
+    const { deleteItem } = useDelete('artist', setRefetch);
 
     const handlePageClick = (event) => {
         setPage(event.selected);
@@ -47,8 +48,15 @@ const Artist = () => {
 
     return (
         <PageLayout title={"Artist"}>
-            {isArtistManager && <ImportExportCsv data={data?.artists} onImport={addBulk} fileName={"artist"} />}
-            {isArtistManager && <Link to="/artist/add" className='addButton'><MdAdd /> Add</Link>}
+            <CustomTitle title={"Artist"} />
+            {isArtistManager && (
+                <>
+                    <ImportExportCsv data={data?.artists} onImport={addBulk} fileName="artist" />
+                    <Link to="/artist/add" className='addButton'>
+                        <MdAdd /> Add
+                    </Link>
+                </>
+            )}
             <Table headings={artistHeadings} data={data?.artists} deleteData={deleteItem} action={isArtistManager} loading={loading} redirect />
             <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />
         </PageLayout>

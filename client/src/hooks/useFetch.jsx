@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { api } from '../services/axios';
+import useAxiosPrivate from './usePrivateAxios';
 
 const useAxiosFetch = (url, refreshTrigger = null) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const axiosPrivate = useAxiosPrivate()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -12,7 +13,7 @@ const useAxiosFetch = (url, refreshTrigger = null) => {
             await new Promise((res) => setTimeout(() => res(), 2000))
             try {
                 console.log("Url", url)
-                const response = await api.get(url);
+                const response = await axiosPrivate.get(url);
                 setData(response.data);
             } catch (err) {
                 setData([])

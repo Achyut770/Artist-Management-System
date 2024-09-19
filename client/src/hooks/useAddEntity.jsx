@@ -6,7 +6,6 @@ const useAddEntity = (endpoint) => {
     const axiosPrivate = useAxiosPrivate();
 
     const addEntity = async (values, additionalParams = {}) => {
-        console.log("Values", values)
         try {
             const res = await axiosPrivate.post(endpoint, { ...values, ...additionalParams });
             toast.success(res.data.message);

@@ -5,6 +5,7 @@ import UserForm from '../../components/common/addUserForm';
 import useAxiosFetch from '../../hooks/useFetch';
 import useEditEntity from '../../hooks/useEditEntity';
 import '../styles/addUser.css';
+import CustomTitle from '../../components/common/CustomTitle';
 
 const EditUser = () => {
     const { userId } = useParams();
@@ -18,6 +19,7 @@ const EditUser = () => {
 
     return (
         <PageLayout title={"Edit User"}>
+            <CustomTitle title={"EditUser"} />
             <div className='form_container'>
                 {error && "Error"}
                 <UserForm initialValue={initialValue} isEditMode={true} handleSubmit={editUser} />

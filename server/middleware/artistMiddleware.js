@@ -1,4 +1,4 @@
-import { checkUserRole } from "../utils/utils.js"
+import { checkUserRoles } from "../utils/utils.js"
 
-export const checkArtistManager = checkUserRole('artist_manager');
+export const checkArtistManager = checkUserRoles(["artist_manager"]);
 

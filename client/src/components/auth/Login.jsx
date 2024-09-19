@@ -3,7 +3,7 @@ import React from 'react';
 import './styles/auth.css';
 import { loginValidationSchema } from './schemas.js';
 import Button from '../common/Button.jsx';
-import { useAuth } from '../../hooks/useAuth.js';
+import { useAuth } from '../../hooks/useAuth.jsx';
 
 const LoginForm = () => {
     const { login } = useAuth();

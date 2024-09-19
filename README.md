@@ -1,8 +1,10 @@
-# Project Setup
+# Artist Management System
 
 ## Getting Started
 
-### Running the Server
+This project consists of a server (backend) and a client (frontend) that interact with a MySQL database. Follow the instructions below to set up and run the project.
+
+### Running the Server (Backend)
 
 1. **Navigate to the Server Directory:**
 
@@ -16,13 +18,25 @@
     npm install
     ```
 
-3. **Start the Server:**
+3. **Create a `.env` File:**
+
+    Copy the example environment file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Open the `.env` file and configure the necessary environment variables. This typically includes database connection details and any other sensitive configuration required for the backend.
+
+4. **Start the Server:**
 
     ```bash
     npm run dev
     ```
 
-### Running the Client
+    This will run the backend server in development mode.
+
+### Running the Client (Frontend)
 
 1. **Navigate to the Client Directory:**
 
@@ -39,14 +53,18 @@
 3. **Start the Client:**
 
     ```bash
-    npm start
+    npm run dev
     ```
 
-## Database Setup
+    This will start the React frontend in development mode.
 
-1. **Log in to MySQL database server.**
+## Database Setup (MySQL)
 
-2. **Run the following SQL commands:**
+To set up the MySQL database required for the project, follow these steps:
+
+1. **Log in to your MySQL database server.**
+
+2. **Run the following SQL commands to create the database and tables:**
 
     ```sql
     -- Create the database
@@ -97,3 +115,9 @@
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
     ```
+
+Now, you’re ready to run the full stack of the Artist Management System!
+
+Start both the client and server, and the app will be accessible at `http://localhost:3000`.
+
+Ensure your MySQL database is running and properly configured to avoid any connection issues.

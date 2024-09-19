@@ -1,9 +1,9 @@
 
 
 import React, { useState } from 'react';
-import { MdDelete, MdEdit } from 'react-icons/md';
 import { FaEye, FaSpinner } from "react-icons/fa6";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { MdDelete, MdEdit } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const UserRow = ({ user, headings, deleteData, action, redirect }) => {
     const { pathname } = useLocation()

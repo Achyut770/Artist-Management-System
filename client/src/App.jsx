@@ -11,9 +11,7 @@ function App() {
         <div className='routes'>
           <Router />
         </div>
-
       </section>
-
     </AuthProvider>
   );
 }

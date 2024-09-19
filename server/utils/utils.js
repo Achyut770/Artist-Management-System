@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_SECRET } from "../config.js";
 import connection from "../db.js";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
@@ -16,14 +16,14 @@ export const verifyToken = (req, res) => {
     });
 };
 
-export const checkUserRole = (requiredRole) => (req, res, next) => {
+export const checkUserRoles = (allowedRoles) => (req, res, next) => {
     const { decoded, error } = verifyToken(req, res);
     if (error) return error;
 
     const userId = decoded.userId;
     getUserRole(userId, res, (role) => {
-        if (role !== requiredRole) {
-            return res.status(401).json({ error: `Access denied. Not a ${requiredRole}` });
+        if (!allowedRoles.includes(role)) {
+            return res.status(401).json({ error: `Access denied. You do not have the required role.` });
         }
         next();
     });

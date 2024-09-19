@@ -8,6 +8,7 @@ import useAxiosFetch from '../hooks/useFetch';
 import { useAuth } from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/usePrivateAxios';
 import { useDelete } from '../hooks/useDelete';
+import CustomTitle from '../components/common/CustomTitle';
 
 const songHeadings = [
     { key: 'title', label: 'Title' },
@@ -34,6 +35,8 @@ const Song = () => {
 
     return (
         <PageLayout title={"Songs"}>
+            <CustomTitle title={"Songs"} />
+
             {isArtistManager && <Link to={`${pathname}/add`} className='addButton'><MdAdd /> Add</Link>}
             <Table headings={songHeadings} data={data?.songs} deleteData={deleteItem} action={isArtistManager} loading={loading} />
             <Pagination handlePageClick={handlePageClick} totalPages={data?.totalPages} />

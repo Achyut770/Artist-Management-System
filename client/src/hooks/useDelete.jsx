@@ -1,7 +1,9 @@
 import { toast } from 'react-toastify';
 import { errorMessage } from '../services/errorMessage';
+import useAxiosPrivate from './usePrivateAxios';
 
-export const useDelete = (axiosPrivate, endpoint, refetch) => {
+export const useDelete = (endpoint, refetch) => {
+    const axiosPrivate = useAxiosPrivate()
     const deleteItem = async (id) => {
         try {
             const res = await axiosPrivate.delete(`${endpoint}/${id}`);

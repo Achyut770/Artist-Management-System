@@ -5,6 +5,7 @@ import useAxiosFetch from '../../hooks/useFetch';
 import ArtistForm from '../../components/dashboard/Artist/ArtistForm';
 import useEditEntity from '../../hooks/useEditEntity';
 import '../styles/addUser.css';
+import CustomTitle from '../../components/common/CustomTitle';
 
 const EditArtist = () => {
     const { artistId } = useParams();
@@ -20,6 +21,8 @@ const EditArtist = () => {
 
     return (
         <PageLayout title={"Edit Artist"}>
+            <CustomTitle title={"Edit Artist"} />
+
             <div className='form_container'>
                 <ArtistForm initialValue={initialValue} isEditMode={true} handleSubmit={editArtist} />
             </div>

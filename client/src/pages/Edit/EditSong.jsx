@@ -5,6 +5,7 @@ import SongForm from '../../components/dashboard/Songs/SongForm';
 import useAxiosFetch from '../../hooks/useFetch';
 import useEditEntity from '../../hooks/useEditEntity';
 import '../styles/addUser.css';
+import CustomTitle from '../../components/common/CustomTitle';
 
 const EditSong = () => {
     const { songId } = useParams();
@@ -15,6 +16,8 @@ const EditSong = () => {
 
     return (
         <PageLayout title={"Edit Song"}>
+            <CustomTitle title={"EditSong"} />
+
             <div className='form_container'>
                 <SongForm initialValue={data} isEditMode={true} handleSubmit={editSong} />
             </div>

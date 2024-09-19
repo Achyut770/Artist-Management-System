@@ -3,6 +3,7 @@ import PageLayout from '../../components/common/PageLayout';
 import SongForm from '../../components/dashboard/Songs/SongForm';
 import { useParams } from 'react-router-dom';
 import useAddEntity from '../../hooks/useAddEntity';
+import CustomTitle from '../../components/common/CustomTitle';
 
 const AddSong = () => {
     const { artistId } = useParams();
@@ -14,6 +15,8 @@ const AddSong = () => {
 
     return (
         <PageLayout title={"Add Song"}>
+            <CustomTitle title={"AddSong"} />
+
             <SongForm handleSubmit={handleAddSong} />
         </PageLayout>
     );

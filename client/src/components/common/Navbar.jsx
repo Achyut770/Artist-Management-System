@@ -48,7 +48,7 @@ const Navbar = () => {
             {
                 navLinks.map((items, id) => {
                     return <>{
-                        items.role.includes(user?.role) ? <NavLink key={items.name} to={items.to} className={pathname === items.to ? "indvLinks navLinks slectedLinks" : 'indvLinks navLinks'}>
+                        items.role.includes(user?.role) ? <NavLink key={items.name} to={items.to} className="indvLinks navLinks">
                             <span className='icon'>{items.link}</span>
                             <span className='linkName'>{items.name}</span>
                         </NavLink> : null

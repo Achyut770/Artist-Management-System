@@ -55,12 +55,12 @@
     background-color: var(--primary-hover);
 }
 
-.slectedLinks .linkName {
+.active .linkName {
     color: white;
 }
 
-.slectedLinks,
-.slectedLinks:hover {
+.active,
+.active:hover {
     background-color: var(--primary-color);
     color: white;
 }
