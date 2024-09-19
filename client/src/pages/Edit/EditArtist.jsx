@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import PageLayout from '../../components/common/PageLayout';
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import useAxiosFetch from '../../hooks/useFetch';
 import ArtistForm from '../../components/dashboard/Artist/ArtistForm';
 import useEditEntity from '../../hooks/useEditEntity';

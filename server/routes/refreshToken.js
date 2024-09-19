@@ -6,10 +6,11 @@ import connection from '../db.js';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
         return res.status(400).json({ error: 'Refresh token is required' });
     }
+
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).json({ error: 'Invalid or expired refresh token' });
@@ -35,6 +36,5 @@ router.post('/', (req, res) => {
         });
     });
 });
-
 
 export default router;

@@ -1,7 +1,22 @@
+// src/components/ArtistForm.js
 import React from 'react';
-import { useFormik } from 'formik';
 import { artistCommonSchema } from './schema';
-import Button from '../../common/Button';
+import Button from '../../common/Ui/Button';
+import useFormHandler from '../../../hooks/useFormHandles';
+import InputField from '../../common/Ui/Input';
+const fields = [
+    { id: 'name', name: 'name', type: 'text', label: 'Name' },
+    { id: 'dob', name: 'dob', type: 'date', label: 'Date of Birth' },
+    { id: 'address', name: 'address', type: 'text', label: 'Address' },
+    { id: 'first_release_year', name: 'first_release_year', type: 'number', label: 'First Release Year' },
+    { id: 'no_of_albums_released', name: 'no_of_albums_released', type: 'number', label: 'Number of Albums Released' },
+];
+
+const genderOptions = [
+    { value: 'm', label: 'Male' },
+    { value: 'f', label: 'Female' },
+    { value: 'o', label: 'Other' },
+];
 
 const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     const initialValues = initialValue || {
@@ -13,123 +28,48 @@ const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         no_of_albums_released: '',
     };
 
-    const formik = useFormik({
+    const formik = useFormHandler({
         initialValues,
-        enableReinitialize: true,
         validationSchema: artistCommonSchema,
-        onSubmit: async (values) => {
-            try {
-                await handleSubmit(values);
-                !isEditMode && formik.resetForm();
-            } catch (error) {
-                console.error('Submission error:', error);
-            }
-        },
+        handleSubmit,
+        isEditMode
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="name">Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
+            {fields.map(({ id, name, type, label }) => (
+                <InputField
+                    key={id}
+                    id={id}
+                    name={name}
+                    type={type}
+                    label={label}
+                    value={formik.values[name]}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.errors[name]}
+                    touched={formik.touched[name]}
                 />
-                {formik.touched.name && formik.errors.name ? (
-                    <div className="error-text">{formik.errors.name}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="dob">Date of Birth</label>
-                <input
-                    id="dob"
-                    name="dob"
-                    type="date"
-                    {...formik.getFieldProps('dob')}
-                />
-                {formik.touched.dob && formik.errors.dob ? (
-                    <div className="error-text">{formik.errors.dob}</div>
-                ) : null}
-            </div>
+            ))}
 
             <div className="form-group">
                 <label>Gender</label>
                 <div role="group" className='gender-group' aria-labelledby="gender-group">
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="m"
-                            checked={formik.values.gender === 'm'}
-                            onChange={formik.handleChange}
-                        />
-                        Male
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="f"
-                            checked={formik.values.gender === 'f'}
-                            onChange={formik.handleChange}
-                        />
-                        Female
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="o"
-                            checked={formik.values.gender === 'o'}
-                            onChange={formik.handleChange}
-                        />
-                        Other
-                    </label>
+                    {genderOptions.map(({ value, label }) => (
+                        <label key={value}>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value={value}
+                                checked={formik.values.gender === value}
+                                onChange={formik.handleChange}
+                            />
+                            {label}
+                        </label>
+                    ))}
                 </div>
                 {formik.touched.gender && formik.errors.gender ? (
                     <div className="error-text">{formik.errors.gender}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="address">Address</label>
-                <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    {...formik.getFieldProps('address')}
-                />
-                {formik.touched.address && formik.errors.address ? (
-                    <div className="error-text">{formik.errors.address}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="first_release_year">First Release Year</label>
-                <input
-                    id="first_release_year"
-                    name="first_release_year"
-                    type="number"
-                    {...formik.getFieldProps('first_release_year')}
-                />
-                {formik.touched.first_release_year && formik.errors.first_release_year ? (
-                    <div className="error-text">{formik.errors.first_release_year}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="no_of_albums_released">Number of Albums Released</label>
-                <input
-                    id="no_of_albums_released"
-                    name="no_of_albums_released"
-                    type="number"
-                    {...formik.getFieldProps('no_of_albums_released')}
-                />
-                {formik.touched.no_of_albums_released && formik.errors.no_of_albums_released ? (
-                    <div className="error-text">{formik.errors.no_of_albums_released}</div>
                 ) : null}
             </div>
 

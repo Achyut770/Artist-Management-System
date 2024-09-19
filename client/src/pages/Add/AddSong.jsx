@@ -1,5 +1,5 @@
 import React from 'react';
-import PageLayout from '../../components/common/PageLayout';
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import SongForm from '../../components/dashboard/Songs/SongForm';
 import { useParams } from 'react-router-dom';
 import useAddEntity from '../../hooks/useAddEntity';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import PageLayout from '../../components/common/PageLayout';
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import UserForm from '../../components/common/addUserForm';
 import useAxiosFetch from '../../hooks/useFetch';
 import useEditEntity from '../../hooks/useEditEntity';

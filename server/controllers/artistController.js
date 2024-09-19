@@ -1,52 +1,66 @@
 import express from 'express';
 import connection from '../db.js';
-
+import { artistCommonSchema } from '../Schema/artsitScehma.js';
 
 const router = express.Router();
 
 router.use(express.json());
 
-export const registerArtist = (req, res) => {
-    const { name, dob, gender, address, first_release_year, no_of_albums_released } = req.body;
+export const registerArtist = async (req, res) => {
+    try {
+        await artistCommonSchema.validate(req.body);
 
-    const query = `INSERT INTO artist (name, dob, gender, address, first_release_year, no_of_albums_released)
-                   VALUES (?, ?, ?, ?, ?, ?)`;
+        const { name, dob, gender, address, first_release_year, no_of_albums_released } = req.body;
 
-    connection.query(query, [name, dob, gender, address, first_release_year, no_of_albums_released], (err, results) => {
-        if (err) {
-            console.log("Error", err);
-            return res.status(500).json({ error: 'Failed to create artist' });
-        }
-        res.status(201).json({ message: 'Artist created successfully', artistId: results.insertId });
-    });
+        const query = `INSERT INTO artist (name, dob, gender, address, first_release_year, no_of_albums_released)
+                       VALUES (?, ?, ?, ?, ?, ?)`;
+
+        connection.query(query, [name, dob, gender, address, first_release_year, no_of_albums_released], (err, results) => {
+            if (err) {
+                console.log("Error", err);
+                return res.status(500).json({ error: 'Failed to create artist' });
+            }
+            res.status(201).json({ message: 'Artist created successfully', artistId: results.insertId });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: erroMessage(error) });
+    }
 };
 
-export const bulkRegisterArtists = (req, res) => {
+export const bulkRegisterArtists = async (req, res) => {
     const artists = req.body.artists;
 
     if (!artists || !Array.isArray(artists) || artists.length === 0) {
         return res.status(400).json({ error: 'Invalid or empty artists array' });
     }
 
-    const query = `INSERT INTO artist (name, dob, gender, address, first_release_year, no_of_albums_released)
-                   VALUES ?`;
-
-    const artistValues = artists.map(artist => [
-        artist.name,
-        artist.dob,
-        artist.gender,
-        artist.address,
-        artist.first_release_year,
-        artist.no_of_albums_released
-    ]);
-
-    connection.query(query, [artistValues], (err, results) => {
-        if (err) {
-            console.log("Error", err);
-            return res.status(500).json({ error: err.message });
+    try {
+        for (let artist of artists) {
+            await artistCommonSchema.validate(artist);
         }
-        res.status(201).json({ message: 'Artists created successfully', affectedRows: results.affectedRows });
-    });
+
+        const query = `INSERT INTO artist (name, dob, gender, address, first_release_year, no_of_albums_released)
+                       VALUES ?`;
+
+        const artistValues = artists.map(artist => [
+            artist.name,
+            artist.dob,
+            artist.gender,
+            artist.address,
+            artist.first_release_year,
+            artist.no_of_albums_released
+        ]);
+
+        connection.query(query, [artistValues], (err, results) => {
+            if (err) {
+                console.log("Error", err);
+                return res.status(500).json({ error: err.message });
+            }
+            res.status(201).json({ message: 'Artists created successfully', affectedRows: results.affectedRows });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: erroMessage(error) });
+    }
 };
 
 export const fetchArtists = (req, res) => {
@@ -93,22 +107,28 @@ export const fetchArtistById = (req, res) => {
     });
 };
 
-export const updateArtist = (req, res) => {
-    const { name, dob, gender, address, first_release_year, no_of_albums_released } = req.body;
+export const updateArtist = async (req, res) => {
+    try {
+        await artistCommonSchema.validate(req.body);
 
-    const query = `UPDATE artist 
-                   SET name = ?, dob = ?, gender = ?, address = ?, first_release_year = ?, no_of_albums_released = ?
-                   WHERE id = ?`;
+        const { name, dob, gender, address, first_release_year, no_of_albums_released } = req.body;
 
-    connection.query(query, [name, dob, gender, address, first_release_year, no_of_albums_released, req.params.id], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to update artist' });
-        }
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ error: 'Artist not found' });
-        }
-        res.status(200).json({ message: 'Artist updated successfully' });
-    });
+        const query = `UPDATE artist 
+                       SET name = ?, dob = ?, gender = ?, address = ?, first_release_year = ?, no_of_albums_released = ?
+                       WHERE id = ?`;
+
+        connection.query(query, [name, dob, gender, address, first_release_year, no_of_albums_released, req.params.id], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to update artist' });
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ error: 'Artist not found' });
+            }
+            res.status(200).json({ message: 'Artist updated successfully' });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: erroMessage(error) });
+    }
 };
 
 export const deleteArtist = (req, res) => {
@@ -124,3 +144,5 @@ export const deleteArtist = (req, res) => {
         res.status(200).json({ message: 'Artist deleted successfully' });
     });
 };
+
+export default router;

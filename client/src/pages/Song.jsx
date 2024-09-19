@@ -1,14 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import PageLayout from '../components/common/PageLayout';
-import Table from '../components/common/Table';
-import Pagination from '../components/common/Pagination';
-import useAxiosFetch from '../hooks/useFetch';
-import { useAuth } from '../hooks/useAuth';
-import useAxiosPrivate from '../hooks/usePrivateAxios';
-import { useDelete } from '../hooks/useDelete';
 import CustomTitle from '../components/common/CustomTitle';
+import PageLayout from '../components/common/Layouts/PageLayout'
+import Pagination from '../components/common/Ui/Pagination';
+import Table from '../components/common/Table/Table';
+import { useAuth } from '../hooks/useAuth';
+import { useDelete } from '../hooks/useDelete';
+import useAxiosFetch from '../hooks/useFetch';
 
 const songHeadings = [
     { key: 'title', label: 'Title' },

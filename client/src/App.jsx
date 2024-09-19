@@ -1,7 +1,7 @@
 import './App.css';
-import Navbar from './components/common/Navbar';
+import Navbar from './components/common/Layouts/Navbar';
 import AuthProvider from './context/AuthProvider';
-import Router from './routes';
+import Router from './router/routes';
 
 function App() {
   return (

@@ -12,7 +12,6 @@ import {
 
 const router = express.Router();
 
-router.use(express.json());
 
 // Routes
 router.post('/register', checkArtistManager, registerArtist);

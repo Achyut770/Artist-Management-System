@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import PageLayout from '../../components/common/PageLayout';
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import SongForm from '../../components/dashboard/Songs/SongForm';
 import useAxiosFetch from '../../hooks/useFetch';
 import useEditEntity from '../../hooks/useEditEntity';

@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import connection from '../db.js';
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '../config.js';
+import { registerValidationSchema, editValidationSchema } from '../Schema/userSchema.js';
+import { erroMessage } from '../utils/error.js';
 
 const verifyToken = (token) => {
     return new Promise((resolve, reject) => {
@@ -16,7 +18,7 @@ const verifyToken = (token) => {
 };
 
 export const getUser = async (req, res) => {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
         return res.status(400).json({ error: 'Refresh token is required' });
     }
@@ -39,9 +41,11 @@ export const getUser = async (req, res) => {
 };
 
 export const registerUser = async (req, res) => {
-    const { first_name, last_name, email, password, phone, dob, gender, address, role } = req.body;
-
     try {
+        await registerValidationSchema.validate(req.body, { abortEarly: false });
+
+        const { first_name, last_name, email, password, phone, dob, gender, address, role } = req.body;
+
         const checkEmailQuery = 'SELECT * FROM user WHERE email = ?';
         connection.query(checkEmailQuery, [email], async (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
@@ -60,7 +64,7 @@ export const registerUser = async (req, res) => {
             }
         });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ error: erroMessage(error) });
     }
 };
 
@@ -83,7 +87,14 @@ export const loginUser = (req, res) => {
         const accessToken = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET, { expiresIn: '20m' });
         const refreshToken = jwt.sign({ userId: user.id }, REFRESH_TOKEN_SECRET, { expiresIn: '30d' });
 
-        res.status(200).json({ message: 'Login successful', accessToken, refreshToken, ...user });
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({ message: 'Login successful', accessToken, ...user });
     });
 };
 
@@ -116,20 +127,27 @@ export const fetchUsers = (req, res) => {
     });
 };
 
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { first_name, last_name, email, password, phone, dob, gender, address, role } = req.body;
 
-    let query = 'UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ?, dob = ?, gender = ?, address = ?, role = ? WHERE id = ?';
-    let values = [first_name, last_name, email, phone, dob, gender, address, role, id];
+    try {
+        await editValidationSchema.validate(req.body, { abortEarly: false });
 
-    connection.query(query, values, (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (results.affectedRows === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        res.status(200).json({ message: 'User updated successfully' });
-    });
+        const { first_name, last_name, email, phone, dob, gender, address, role } = req.body;
+
+        const query = 'UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ?, dob = ?, gender = ?, address = ?, role = ? WHERE id = ?';
+        const values = [first_name, last_name, email, phone, dob, gender, address, role, id];
+
+        connection.query(query, values, (err, results) => {
+            if (err) return res.status(500).json({ error: err.message });
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            res.status(200).json({ message: 'User updated successfully' });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: erroMessage(error) });
+    }
 };
 
 export const deleteUser = (req, res) => {
@@ -160,4 +178,9 @@ export const fetchUserById = (req, res) => {
         const user = { ...results[0] };
         res.status(200).json(user);
     });
+};
+
+export const logout = (_, res) => {
+    res.cookie('refreshToken', '', { expires: new Date(0), httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.status(200).json({ message: 'Logout successful' });
 };

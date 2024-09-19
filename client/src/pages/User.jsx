@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import CustomTitle from '../components/common/CustomTitle';
-import PageLayout from '../components/common/PageLayout';
-import Pagination from '../components/common/Pagination';
-import Table from '../components/common/Table';
+import PageLayout from '../components/common/Layouts/PageLayout'
+import Pagination from '../components/common/Ui/Pagination';
+import Table from '../components/common/Table/Table';
 import { useDelete } from '../hooks/useDelete';
 import useAxiosFetch from '../hooks/useFetch';
 

@@ -12,7 +12,6 @@ const useAxiosFetch = (url, refreshTrigger = null) => {
             setLoading(true);
             await new Promise((res) => setTimeout(() => res(), 2000))
             try {
-                console.log("Url", url)
                 const response = await axiosPrivate.get(url);
                 setData(response.data);
             } catch (err) {

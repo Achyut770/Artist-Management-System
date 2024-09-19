@@ -4,7 +4,7 @@ import { GiFishingNet, GiMusicSpell } from "react-icons/gi";
 import { MdLogout } from 'react-icons/md';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../../hooks/useAuth';
 import "./styles/navbar.css";
 
 

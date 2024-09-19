@@ -1,7 +1,7 @@
 import React from 'react';
 import "./styles/table.css";
 import UserRow from './userRow';
-import TableSkeleton from '../dashboard/TableSkeleton';
+import TableSkeleton from './TableSkeleton';
 
 const Table = ({ headings, data, deleteData, redirect = false, action = true, loading }) => {
     if (loading) {

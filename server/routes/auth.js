@@ -7,7 +7,8 @@ import {
     fetchUsers,
     updateUser,
     deleteUser,
-    fetchUserById
+    fetchUserById,
+    logout
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -20,5 +21,6 @@ router.get('/', checkAdmin, fetchUsers);
 router.get('/:id', fetchUserById);
 router.put('/edit/:id', checkAdmin, updateUser);
 router.delete('/delete/:id', checkAdmin, deleteUser);
+router.post('/logout', logout);
 
 export default router;

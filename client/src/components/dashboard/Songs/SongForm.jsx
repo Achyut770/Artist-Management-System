@@ -1,54 +1,54 @@
 import React from 'react';
-import { useFormik } from 'formik';
 import { songValidationSchema } from './schema';
-import Button from "../../common/Button"
-
+import Button from '../../common/Ui/Button';
+import useFormHandler from '../../../hooks/useFormHandles';
+import InputField from '../../common/Ui/Input';
 const GENRES = ['rnb', 'country', 'classic', 'rock', 'jazz'];
 
+const fields = [
+    { id: 'title', name: 'title', type: 'text', label: 'Song Title' },
+    { id: 'album_name', name: 'album_name', type: 'text', label: 'Album Name' },
+];
 
 const SongForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     const initialValues = initialValue || {
         title: '',
         genre: GENRES[0],
-        album_name: "",
+        album_name: '',
     };
 
-    const formik = useFormik({
+    const formik = useFormHandler({
         initialValues,
-        enableReinitialize: true,
         validationSchema: songValidationSchema,
-        onSubmit: async (values) => {
-            try {
-                await handleSubmit(values);
-                !isEditMode && formik.resetForm();
-            } catch (error) {
-                console.error('Submission error:', error);
-            }
-        },
+        handleSubmit,
+        isEditMode
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="title">Song Title</label>
-                <input
-                    id="title"
-                    name="title"
-                    type="text"
-                    {...formik.getFieldProps('title')}
+            {fields.map(({ id, name, type, label }) => (
+                <InputField
+                    key={id}
+                    id={id}
+                    name={name}
+                    type={type}
+                    label={label}
+                    value={formik.values[name]}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.errors[name]}
+                    touched={formik.touched[name]}
                 />
-                {formik.touched.title && formik.errors.title ? (
-                    <div className="error-text">{formik.errors.title}</div>
-                ) : null}
-            </div>
-
+            ))}
 
             <div className="form-group">
                 <label htmlFor="genre">Genre</label>
                 <select
                     id="genre"
                     name="genre"
-                    {...formik.getFieldProps('genre')}
+                    value={formik.values.genre}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                 >
                     {GENRES.map((genre) => (
                         <option key={genre} value={genre}>
@@ -58,19 +58,6 @@ const SongForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
                 </select>
                 {formik.touched.genre && formik.errors.genre ? (
                     <div className="error-text">{formik.errors.genre}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="album_name">Album Name</label>
-                <input
-                    id="album_name"
-                    name="album_name"
-                    type="text"
-                    {...formik.getFieldProps('album_name')}
-                />
-                {formik.touched.album_name && formik.errors.album_name ? (
-                    <div className="error-text">{formik.errors.album_name}</div>
                 ) : null}
             </div>
 

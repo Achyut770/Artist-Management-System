@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaSpinner } from 'react-icons/fa6';
-import "../dashboard/styles/Button.css"
+import "./styles/Button.css"
 
 const Button = ({ className, children, loading, ...res }) => {
     return (

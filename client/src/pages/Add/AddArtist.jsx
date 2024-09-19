@@ -1,5 +1,5 @@
 import React from 'react';
-import PageLayout from '../../components/common/PageLayout';
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import ArtistForm from '../../components/dashboard/Artist/ArtistForm';
 import useAddEntity from '../../hooks/useAddEntity';
 import CustomTitle from '../../components/common/CustomTitle';

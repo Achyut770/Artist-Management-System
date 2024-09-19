@@ -1,7 +1,7 @@
 import React from 'react'
 import RegisterForm from '../../components/auth/RegisterForm'
 import "../styles/addUser.css"
-import PageLayout from '../../components/common/PageLayout'
+import PageLayout from '../../components/common/Layouts/PageLayout'
 import CustomTitle from '../../components/common/CustomTitle'
 
 const AddUser = () => {

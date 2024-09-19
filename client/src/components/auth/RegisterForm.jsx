@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 
 const RegisterForm = () => {
     const navigate = useNavigate()
-
     const register = async (values) => {
         try {
             const res = await api.post("auth/register", values)
@@ -15,6 +14,7 @@ const RegisterForm = () => {
             navigate("/login")
         } catch (error) {
             toast.error(error?.response?.data?.message)
+            throw error
         }
     }
     return (

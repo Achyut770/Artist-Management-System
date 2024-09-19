@@ -1,8 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { api } from '../services/axios';
+import React, { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { refreshToken } from '../services/refreshToken';
 import { toast } from 'react-toastify';
+import { api } from '../services/axios';
 import { errorMessage } from '../services/errorMessage';
 
 export const AuthContext = createContext();
@@ -21,7 +20,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await api.post('auth/get-user', { refreshToken });
+                const response = await api.post('auth/get-user');
                 if (response.status !== 200) {
                     throw response
                 }
@@ -30,7 +29,6 @@ const AuthProvider = ({ children }) => {
                 console.error('Failed to fetch user', error);
             } finally {
                 setLoading(() => false);
-
             }
         };
 
@@ -40,28 +38,27 @@ const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await api.post('auth/login', credentials);
-            const { refreshToken, accessToken, role, message } = response.data;
-            localStorage.setItem('refreshToken', refreshToken);
-            setUser(() => ({ accessToken, role }))
-            toast.success(message)
-            navigate(`/${RolesNavigate[role]}`, { replace: true })
-
+            const data = response.data;
+            setUser(() => ({ ...data }))
+            toast.success(data.message)
+            navigate(`/${RolesNavigate[data.role]}`, { replace: true })
         } catch (error) {
+            console.log("Error", error)
             toast.error(errorMessage(error))
-
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('refreshToken');
-        setUser(null);
-        navigate("/login", { replace: true })
-
+    const logout = async () => {
+        try {
+            const response = await api.post('/auth/logout');
+            toast.success(response.data.message)
+            setUser(null);
+            navigate("/login", { replace: true })
+        } catch (error) {
+            toast.error(errorMessage(error))
+        }
     };
-
     const value = { user, login, logout, loading, setUser };
-
-
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

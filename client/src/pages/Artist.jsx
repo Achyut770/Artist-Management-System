@@ -2,14 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import CustomTitle from '../components/common/CustomTitle';
-import PageLayout from '../components/common/PageLayout';
-import Pagination from '../components/common/Pagination';
-import Table from '../components/common/Table';
+import Pagination from '../components/common/Ui/Pagination';
+import Table from '../components/common/Table/Table';
 import ImportExportCsv from '../components/dashboard/Artist/InmportExportCsv';
 import useAddEntity from '../hooks/useAddEntity';
 import { useAuth } from '../hooks/useAuth';
 import { useDelete } from '../hooks/useDelete';
 import useAxiosFetch from '../hooks/useFetch';
+import PageLayout from "../components/common/Layouts/PageLayout"
 
 const artistHeadings = [
     { key: 'name', label: 'Name' },

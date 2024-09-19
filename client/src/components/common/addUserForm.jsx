@@ -1,7 +1,31 @@
 import React from 'react';
-import { useFormik } from 'formik';
-import Button from './Button';
 import { editValidationSchema, registerValidationSchema } from '../auth/schemas';
+import Button from './Ui/Button';
+import InputField from './Ui/Input';
+import useFormHandler from '../../hooks/useFormHandles';
+
+const GENDERS = [
+    { value: 'm', label: 'Male' },
+    { value: 'f', label: 'Female' },
+    { value: 'o', label: 'Other' }
+];
+
+const fields = [
+    { id: 'first_name', name: 'first_name', type: 'text', label: 'First Name' },
+    { id: 'last_name', name: 'last_name', type: 'text', label: 'Last Name' },
+    { id: 'email', name: 'email', type: 'email', label: 'Email' },
+    { id: 'password', name: 'password', type: 'password', label: 'Password' },
+    { id: 'confirm_password', name: 'confirm_password', type: 'password', label: 'Confirm Password' },
+    { id: 'phone', name: 'phone', type: 'text', label: 'Phone' },
+    { id: 'dob', name: 'dob', type: 'date', label: 'Date of Birth' },
+    { id: 'address', name: 'address', type: 'text', label: 'Address' }
+];
+
+const roles = [
+    { value: 'super_admin', label: 'Super Admin' },
+    { value: 'artist_manager', label: 'Artist Manager' },
+    { value: 'artist', label: 'Artist' }
+];
 
 const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     const initialValues = initialValue || {
@@ -9,159 +33,59 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         last_name: '',
         email: '',
         password: '',
+        confirm_password: '',
         phone: '',
         dob: '',
         gender: 'm',
         address: '',
-        role: 'artist',
-        confirm_password: ""
+        role: 'artist'
     };
 
-    const formik = useFormik({
+    const formik = useFormHandler({
         initialValues,
-        enableReinitialize: true,
         validationSchema: isEditMode ? editValidationSchema : registerValidationSchema,
-        onSubmit: async (values) => {
-            try {
-                await handleSubmit(values);
-                !isEditMode && formik.resetForm();
-            } catch (error) {
-                console.error('Submission error:', error);
-            }
-        },
+        handleSubmit,
+        isEditMode
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="first_name">First Name</label>
-                <input
-                    id="first_name"
-                    name="first_name"
-                    type="text"
-                    {...formik.getFieldProps('first_name')}
-                />
-                {formik.touched.first_name && formik.errors.first_name ? (
-                    <div className="error-text">{formik.errors.first_name}</div>
-                ) : null}
-            </div>
+            {fields.map(({ id, name, type, label }) => {
+                if (isEditMode && (name === 'password' || name === 'confirm_password')) {
+                    return null;
+                }
 
-            <div className="form-group">
-                <label htmlFor="last_name">Last Name</label>
-                <input
-                    id="last_name"
-                    name="last_name"
-                    type="text"
-                    {...formik.getFieldProps('last_name')}
-                />
-                {formik.touched.last_name && formik.errors.last_name ? (
-                    <div className="error-text">{formik.errors.last_name}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    {...formik.getFieldProps('email')}
-                />
-                {formik.touched.email && formik.errors.email ? (
-                    <div className="error-text">{formik.errors.email}</div>
-                ) : null}
-            </div>
-
-            {!isEditMode && (
-                <>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            {...formik.getFieldProps('password')}
-                        />
-                        {formik.touched.password && formik.errors.password ? (
-                            <div className="error-text">{formik.errors.password}</div>
-                        ) : null}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="confirm_password">Confirm Password</label>
-                        <input
-                            id="confirm_password"
-                            name="confirm_password"
-                            type="password"
-                            {...formik.getFieldProps('confirm_password')}
-                        />
-                        {formik.touched.confirm_password && formik.errors.confirm_password ? (
-                            <div className="error-text">{formik.errors.confirm_password}</div>
-                        ) : null}
-                    </div>
-                </>
-
-            )}
-
-            <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    {...formik.getFieldProps('phone')}
-                />
-                {formik.touched.phone && formik.errors.phone ? (
-                    <div className="error-text">{formik.errors.phone}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="dob">Date of Birth</label>
-                <input
-                    id="dob"
-                    name="dob"
-                    type="date"
-                    {...formik.getFieldProps('dob')}
-                />
-                {formik.touched.dob && formik.errors.dob ? (
-                    <div className="error-text">{formik.errors.dob}</div>
-                ) : null}
-            </div>
+                return (
+                    <InputField
+                        key={id}
+                        id={id}
+                        name={name}
+                        type={type}
+                        label={label}
+                        value={formik.values[name]}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.errors[name]}
+                        touched={formik.touched[name]}
+                    />
+                );
+            })}
 
             <div className="form-group">
                 <label>Gender</label>
                 <div role="group" className='gender-group' aria-labelledby="gender-group">
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="m"
-                            checked={formik.values.gender === 'm'}
-                            onChange={formik.handleChange}
-                        />
-                        Male
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="f"
-                            checked={formik.values.gender === 'f'}
-                            onChange={formik.handleChange}
-                        />
-                        Female
-                    </label>
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            value="o"
-                            checked={formik.values.gender === 'o'}
-                            onChange={formik.handleChange}
-                        />
-                        Other
-                    </label>
+                    {GENDERS.map((gender) => (
+                        <label key={gender.value}>
+                            <input
+                                type="radio"
+                                name="gender"
+                                value={gender.value}
+                                checked={formik.values.gender === gender.value}
+                                onChange={formik.handleChange}
+                            />
+                            {gender.label}
+                        </label>
+                    ))}
                 </div>
                 {formik.touched.gender && formik.errors.gender ? (
                     <div className="error-text">{formik.errors.gender}</div>
@@ -169,24 +93,13 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
             </div>
 
             <div className="form-group">
-                <label htmlFor="address">Address</label>
-                <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    {...formik.getFieldProps('address')}
-                />
-                {formik.touched.address && formik.errors.address ? (
-                    <div className="error-text">{formik.errors.address}</div>
-                ) : null}
-            </div>
-
-            <div className="form-group">
                 <label htmlFor="role">Role</label>
                 <select id="role" name="role" {...formik.getFieldProps('role')}>
-                    <option value="super_admin">Super Admin</option>
-                    <option value="artist_manager">Artist Manager</option>
-                    <option value="artist">Artist</option>
+                    {roles.map(({ value, label }) => (
+                        <option key={value} value={value}>
+                            {label}
+                        </option>
+                    ))}
                 </select>
                 {formik.touched.role && formik.errors.role ? (
                     <div className="error-text">{formik.errors.role}</div>

@@ -1,12 +1,11 @@
 import { api } from '../services/axios';
-import { refreshToken } from '../services/refreshToken';
 import { useAuth } from './useAuth';
 
 const useRefreshToken = () => {
     const { setUser } = useAuth();
 
     const refresh = async () => {
-        const response = await api.post('/refresh_token', { refreshToken });
+        const response = await api.post('/refresh_token');
         setUser(prev => {
             return { ...prev, accessToken: response.data.accessToken }
         });

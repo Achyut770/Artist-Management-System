@@ -6,8 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ErrorBoundary from './components/common/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
+import ErrorBoundary from "./components/error/ErrorBoundary"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

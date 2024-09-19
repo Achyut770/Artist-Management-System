@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { RolesNavigate } from '../../context/AuthProvider';
-import Loader from './Loader';
+import Loader from './Ui/Loader';
 import { useAuth } from '../../hooks/useAuth';
 
 const ProtectedRoute = ({ allowedRoles }) => {
