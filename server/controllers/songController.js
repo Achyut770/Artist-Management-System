@@ -1,118 +1,139 @@
-import connection from '../db.js';
-import { songValidationSchema } from "../Schema/songSchema.js"
-import { erroMessage } from '../utils/error.js';
+import { songValidationSchema } from "../Schema/songSchema.js";
+import { errorMessage } from '../utils/error.js';
+import { queryDatabase } from '../utils/utils.js';
+
+
 
 export const createSong = async (req, res) => {
     try {
+        // Validate the song schema
         await songValidationSchema.validate(req.body);
 
         const { title, genre, album_name } = req.body;
         const { artistId } = req.params;
 
+        // Check if artist exists
         const checkArtistQuery = 'SELECT * FROM artist WHERE id = ?';
-        connection.query(checkArtistQuery, [artistId], (err, artistResults) => {
-            if (err) {
-                return res.status(500).json({ error: 'Database error occurred' });
-            }
-            if (artistResults.length === 0) {
-                return res.status(404).json({ error: 'Artist not found' });
-            }
+        const artistResults = await queryDatabase(checkArtistQuery, [artistId]);
 
-            const insertSongQuery = `INSERT INTO song (title, genre, album_name, artist_id) VALUES (?, ?, ?, ?)`;
-            connection.query(insertSongQuery, [title, genre, album_name, artistId], (err, result) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Failed to create song' });
-                }
-                res.status(201).json({ message: 'Song created successfully', songId: result.insertId });
-            });
-        });
+        if (!artistResults.length) {
+            return res.status(404).json({ error: 'Artist not found' });
+        }
+
+        // Insert new song
+        const insertSongQuery = `
+            INSERT INTO song (title, genre, album_name, artist_id)
+            VALUES (?, ?, ?, ?)
+        `;
+        const result = await queryDatabase(insertSongQuery, [title, genre, album_name, artistId]);
+
+        res.status(201).json({ message: 'Song created successfully', songId: result.insertId });
     } catch (error) {
-        res.status(500).json({ error: erroMessage(error) });
+        res.status(500).json({ error: errorMessage(error) });
     }
 };
 
-export const getSongById = (req, res) => {
-    const { id } = req.params;
+export const getSongById = async (req, res) => {
+    try {
+        const { artistId } = req.params;
 
-    const query = `SELECT song.*, artist.name as artist_name FROM song JOIN artist ON song.artist_id = artist.id WHERE song.id = ?`;
-    connection.query(query, [id], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to fetch song' });
-        }
-        if (results.length === 0) {
+        const query = `
+            SELECT song.*, artist.name as artist_name
+            FROM song 
+            JOIN artist ON song.artist_id = artist.id
+            WHERE song.id = ?
+        `;
+        const results = await queryDatabase(query, [artistId]);
+
+        if (!results.length) {
             return res.status(404).json({ error: 'Song not found' });
         }
+
         res.status(200).json(results[0]);
-    });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch song' });
+    }
 };
 
-export const getSongsByArtistId = (req, res) => {
-    const { artistId } = req.params;
-    const { page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
+export const getSongsByArtistId = async (req, res) => {
+    try {
+        const { artistId } = req.params;
+        const { page = 1, limit = 10 } = req.query;
+        const offset = (page - 1) * limit;
 
-    const query = `SELECT song.*, artist.name as artist_name FROM song JOIN artist ON song.artist_id = artist.id WHERE artist_id = ? LIMIT ? OFFSET ?`;
-    connection.query(query, [artistId, parseInt(limit, 10), offset], (err, songs) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to fetch songs' });
-        }
-        if (songs.length === 0) {
+        // Fetch songs by artist ID with pagination
+        const query = `
+            SELECT song.*, artist.name as artist_name
+            FROM song 
+            JOIN artist ON song.artist_id = artist.id
+            WHERE artist_id = ?
+            LIMIT ? OFFSET ?
+        `;
+        const songs = await queryDatabase(query, [artistId, parseInt(limit, 10), offset]);
+
+        if (!songs.length) {
             return res.status(404).json({ error: 'No songs found for this artist' });
         }
 
+        // Get total count of songs for pagination
         const countQuery = 'SELECT COUNT(*) AS total FROM song WHERE artist_id = ?';
-        connection.query(countQuery, [artistId], (err, countResult) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to count songs' });
-            }
+        const countResult = await queryDatabase(countQuery, [artistId]);
 
-            const total = countResult[0].total;
-            const totalPages = Math.ceil(total / parseInt(limit, 10));
+        const total = countResult[0].total;
+        const totalPages = Math.ceil(total / limit);
 
-            res.status(200).json({
-                total,
-                totalPages,
-                page: parseInt(page, 10),
-                pageSize: songs.length,
-                songs,
-            });
+        res.status(200).json({
+            total,
+            totalPages,
+            page: parseInt(page, 10),
+            pageSize: songs.length,
+            songs,
         });
-    });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch songs' });
+    }
 };
 
 export const updateSong = async (req, res) => {
     try {
+        // Validate the song schema
         await songValidationSchema.validate(req.body);
 
         const { title, genre, album_name } = req.body;
-        const { id } = req.params;
+        const { songId } = req.params;
 
-        const updateQuery = `UPDATE song SET title = ?, genre = ?, album_name = ? WHERE id = ?`;
-        connection.query(updateQuery, [title, genre, album_name, id], (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: 'Failed to update song' });
-            }
-            if (results.affectedRows === 0) {
-                return res.status(404).json({ error: 'Song not found' });
-            }
-            res.status(200).json({ message: 'Song updated successfully' });
-        });
+        // Update song details
+        const updateQuery = `
+            UPDATE song
+            SET title = ?, genre = ?, album_name = ?
+            WHERE id = ?
+        `;
+        const result = await queryDatabase(updateQuery, [title, genre, album_name, songId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Song not found' });
+        }
+
+        res.status(200).json({ message: 'Song updated successfully' });
     } catch (error) {
-        res.status(500).json({ error: erroMessage(error) });
+        res.status(500).json({ error: errorMessage(error) });
     }
 };
 
-export const deleteSong = (req, res) => {
-    const { id } = req.params;
+export const deleteSong = async (req, res) => {
+    try {
+        const { songId } = req.params;
 
-    const deleteQuery = `DELETE FROM song WHERE id = ?`;
-    connection.query(deleteQuery, [id], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to delete song' });
-        }
-        if (results.affectedRows === 0) {
+        // Delete song by ID
+        const deleteQuery = 'DELETE FROM song WHERE id = ?';
+        const result = await queryDatabase(deleteQuery, [songId]);
+
+        if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Song not found' });
         }
+
         res.status(200).json({ message: 'Song deleted successfully' });
-    });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete song' });
+    }
 };

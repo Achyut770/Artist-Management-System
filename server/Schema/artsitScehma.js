@@ -1,7 +1,8 @@
 import * as Yup from 'yup';
 
-export const artistCommonSchema = Yup.object({
+export const artistSchema = Yup.object({
     name: Yup.string().required('This field is required'),
+    user_id:Yup.string().required("user_id is required"),
     dob: Yup.date().required('This field is required'),
     gender: Yup.string().oneOf(['m', 'f', 'o'], 'Invalid gender').required('This field is required'),
     address: Yup.string().required('This field is required'),

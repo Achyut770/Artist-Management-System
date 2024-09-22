@@ -1,19 +1,16 @@
-import React from 'react'
-import RegisterForm from '../../components/auth/RegisterForm'
-import "../styles/addUser.css"
-import PageLayout from '../../components/common/Layouts/PageLayout'
-import CustomTitle from '../../components/common/CustomTitle'
+import React from "react";
+import RegisterForm from "../../components/auth/RegisterForm";
+import PageLayout from "../../components/common/Layouts/PageLayout";
+import "../styles/addUser.css";
 
 const AddUser = () => {
-    return (
-        <PageLayout title={"Add User"}>
-            <CustomTitle title={"AddUser"} />
-            <div className='form_container'>
-                <RegisterForm />
-            </div>
-        </PageLayout>
+  return (
+    <PageLayout title={"Add User"}>
+      <div className="form_container">
+        <RegisterForm />
+      </div>
+    </PageLayout>
+  );
+};
 
-    )
-}
-
-export default AddUser
+export default AddUser;

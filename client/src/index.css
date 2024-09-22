@@ -10,7 +10,7 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+  }
 
 :root {
   --primary-color: #4CAF50;
@@ -21,4 +21,9 @@ code {
   --text-color: #333;
   --action-hover-color: #FF7043;
   --form-border-shadow: rgba(99, 99, 99, .2) 0px 2px 8px 0px;
+  --border-color:#ddd;
+  --primary-bg-text-color: white;
+--disbale-background:#f4f4f4;
+--disable-color:#999;
+--auth-background-color :#f0f4f8
 }

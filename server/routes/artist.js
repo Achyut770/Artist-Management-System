@@ -12,7 +12,6 @@ import {
 
 const router = express.Router();
 
-
 // Routes
 router.post('/register', checkArtistManager, registerArtist);
 router.post('/bulk_register', checkArtistManager, bulkRegisterArtists);

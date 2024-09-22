@@ -1,14 +1,14 @@
 import express from 'express';
-import { createSong, getSongById, getSongsByArtistId, updateSong, deleteSong } from '../controllers/songController.js';
-import { checkArtistManager } from '../middleware/artistMiddleware.js';
+import { createSong, deleteSong, getSongById, getSongsByArtistId, updateSong } from '../controllers/songController.js';
+import { checkSongOwnership } from '../middleware/songMiddleWare.js';
 
 const router = express.Router();
 
 //Routes
-router.post('/:artistId', checkArtistManager, createSong);
-router.get('/single_song/:id', getSongById);
+router.post('/:artistId', checkSongOwnership, createSong);
+router.get('/single_song/:artistId', getSongById);
 router.get('/:artistId', getSongsByArtistId);
-router.put('/:id', checkArtistManager, updateSong);
-router.delete('/:id', checkArtistManager, deleteSong);
+router.put('/:artistId/:songId', checkSongOwnership, updateSong);
+router.delete('/:artistId/:songId', checkSongOwnership, deleteSong);
 
 export default router;

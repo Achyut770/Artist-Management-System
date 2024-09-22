@@ -5,54 +5,54 @@ input[type="file"] {
 .importExpostContainer {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 1.25rem;
 }
 
 .importExpostContainer button,
 .buttonImport {
-    padding: 10px 25px;
+    padding: 0.625rem 1.5625rem;
     background-color: var(--accent-color);
-    color: white;
+    color: var(--primary-bg-text-color);
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 }
 
 .importExpostContainer button:hover,
 .buttonImport:hover {
-    transform: translateY(-2px);
+    transform: translateY(-0.125rem);
 }
 
 .importExpostContainer button:focus,
 .buttonImport:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 0.1875rem rgba(255, 255, 255, 0.5);
 }
 
 @media (max-width: 768px) {
     .importExpostContainer {
-        gap: 15px;
+        gap: 0.9375rem;
     }
 
     .importExpostContainer button,
     .buttonImport {
-        padding: 8px 20px;
-        font-size: 13px;
+        padding: 0.5rem 1.25rem;
+        font-size: 0.8125rem;
     }
 }
 
 @media (max-width: 480px) {
     .importExpostContainer {
-        gap: 10px;
+        gap: 0.625rem;
     }
 
     .importExpostContainer button,
     .buttonImport {
-        padding: 6px 15px;
-        font-size: 12px;
+        padding: 0.375rem 0.9375rem;
+        font-size: 0.75rem;
     }
 }

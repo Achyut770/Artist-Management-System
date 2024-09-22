@@ -1,31 +1,36 @@
-import { useEffect, useState } from 'react';
-import useAxiosPrivate from './usePrivateAxios';
+import { useEffect, useState } from "react";
+import useAxiosPrivate from "./usePrivateAxios";
 
-const useAxiosFetch = (url, refreshTrigger = null) => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const axiosPrivate = useAxiosPrivate()
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [isloading, setIsLoading] = useState(true);
+  const [refetch, setRefetch] = useState(false);
+  const [error, setError] = useState(null);
+  const axiosPrivate = useAxiosPrivate();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            await new Promise((res) => setTimeout(() => res(), 2000))
-            try {
-                const response = await axiosPrivate.get(url);
-                setData(response.data);
-            } catch (err) {
-                setData([])
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await new Promise((res) => setTimeout(() => res(), 2000));
+      try {
+        const response = await axiosPrivate.get(url);
+        setData(response.data);
+      } catch (err) {
+        setData([]);
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        fetchData();
-    }, [url, refreshTrigger]);
+    fetchData();
+  }, [url, refetch]);
 
-    return { data, loading, error };
+  const refetchTrigger = () => {
+    setRefetch((prev) => !prev);
+  };
+
+  return { data, isloading, error, refetchTrigger };
 };
 
-export default useAxiosFetch;
+export default useFetch;

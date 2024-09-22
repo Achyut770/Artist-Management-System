@@ -8,12 +8,14 @@ import {
     updateUser,
     deleteUser,
     fetchUserById,
-    logout
+    logout,
+    fetchArtistWithoutArtistTableLink
 } from '../controllers/userController.js';
+import { checkArtistManager } from '../middleware/artistMiddleware.js';
 
 const router = express.Router();
 
-// Routes
+router.get('/get_artist_without_artist_table' ,checkArtistManager, fetchArtistWithoutArtistTableLink)
 router.post('/get-user', getUser);
 router.post('/register', registerUser);
 router.post('/login', loginUser);

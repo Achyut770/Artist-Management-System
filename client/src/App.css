@@ -1,11 +1,11 @@
 .routes {
   flex: 1;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .route_container {
   display: flex;
-  gap: 20px;
+  gap: 1.25rem;
   flex-direction: column;
 }
 
@@ -13,24 +13,22 @@
   box-sizing: border-box;
 }
 
-
-
 .container {
   display: flex;
   flex-direction: row;
-  align-items: start;
+  align-items: flex-start;
 }
 
-.addButton {
+.add-button {
   background-color: var(--accent-color);
-  width: 100px;
-  height: 40px;
-  color: white;
+  width: 6.25rem;
+  height: 2.5rem;
+  color: var(--primary-bg-text-color);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  border-radius: 20px;
+  gap: 0.625rem;
+  border-radius: 1.25rem;
   margin-left: auto;
   text-decoration: none;
 }

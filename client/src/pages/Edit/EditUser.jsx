@@ -1,31 +1,34 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import PageLayout from '../../components/common/Layouts/PageLayout'
-import UserForm from '../../components/common/addUserForm';
-import useAxiosFetch from '../../hooks/useFetch';
-import useEditEntity from '../../hooks/useEditEntity';
-import '../styles/addUser.css';
-import CustomTitle from '../../components/common/CustomTitle';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { apiPath, template } from "../../api/api";
+import PageLayout from "../../components/common/Layouts/PageLayout";
+import UserForm from "../../components/common/userForm";
+import useEditEntity from "../../hooks/useEditEntity";
+import useFetch from "../../hooks/useFetch";
+import "../styles/addUser.css";
 
 const EditUser = () => {
-    const { userId } = useParams();
-    const { data, error } = useAxiosFetch(`/auth/${userId}`);
-    const editUser = useEditEntity('auth/edit', userId);
-
-    const initialValue = data ? {
+  const { userId } = useParams();
+  const { data } = useFetch(template(apiPath.fetchUserById, { userId }));
+  const editUser = useEditEntity(apiPath.editUser, userId);
+  const initialValue = data
+    ? {
         ...data,
-        dob: data.dob ? new Date(data.dob).toISOString().split('T')[0] : ''
-    } : {};
+        dob: data.dob ? new Date(data.dob).toISOString().split("T")[0] : "",
+      }
+    : {};
 
-    return (
-        <PageLayout title={"Edit User"}>
-            <CustomTitle title={"EditUser"} />
-            <div className='form_container'>
-                {error && "Error"}
-                <UserForm initialValue={initialValue} isEditMode={true} handleSubmit={editUser} />
-            </div>
-        </PageLayout>
-    );
+  return (
+    <PageLayout title={"Edit User"}>
+      <div className="form_container">
+        <UserForm
+          initialValue={initialValue}
+          isEditMode={true}
+          handleSubmit={editUser}
+        />
+      </div>
+    </PageLayout>
+  );
 };
 
 export default EditUser;

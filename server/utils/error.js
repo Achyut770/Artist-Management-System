@@ -1,4 +1,4 @@
-export const erroMessage = (error) => {
+export const errorMessage = (error) => {
     if (error.name === 'ValidationError') {
         return error.errors;
     }
