@@ -10,6 +10,8 @@ import useAddEntity from "../hooks/useAddEntity";
 import { useAuth } from "../hooks/useAuth";
 import { useDelete } from "../hooks/useDelete";
 import useFetch from "../hooks/useFetch";
+import { artistSchema } from "../components/dashboard/Artist/schema";
+import { toast } from "react-toastify";
 
 const artistHeadings = [
   { key: "name", label: "Name" },
@@ -33,8 +35,18 @@ const Artist = () => {
   const handlePageClick = useCallback((event) => setPage(event.selected), []);
 
   const addBulk = useCallback(async (artists) => {
-    addBulkArtist({ artists });
-    refetchTrigger();
+    for (const artist of artists) {
+      try {
+        await artistSchema.validate(artist);
+      } catch (error) {
+        return toast.error("Validation error");
+      }
+    }
+
+    if (artists.length > 0) {
+      await addBulkArtist({ artists: artists });
+      refetchTrigger();
+    }
   }, []);
 
   return (
