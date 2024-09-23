@@ -84,7 +84,7 @@
         left: 1.25rem;
         z-index: 2;
         font-size: 1.5625rem;
-        color: var(--primary-bg-text-color);
+        color: var(--text-color);
     }
 
     .fixResHam {

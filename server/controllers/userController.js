@@ -170,8 +170,8 @@ export const fetchUserById = async (req,res) => {
 export const fetchArtistWithoutArtistTableLink = async (req,res)=>{
   const query=  `
         SELECT 
-            u.id AS user_id, 
-            CONCAT(u.first_name, ' ', u.last_name) AS full_name
+            u.id AS value, 
+            CONCAT(u.first_name, ' ', u.last_name) AS label
         FROM 
             user u
         LEFT JOIN 

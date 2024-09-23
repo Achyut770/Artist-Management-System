@@ -110,7 +110,17 @@ In the `artist` table, I have added a `user_id` field. This field establishes a 
    npm install
    ```
 
-3. **Start the Client:**
+3. **Create a `.env` File:**
+
+   Copy the example environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Open the `.env` file and configure the necessary environment variables.
+
+4. **Start the Client:**
 
    ```bash
    npm run dev
