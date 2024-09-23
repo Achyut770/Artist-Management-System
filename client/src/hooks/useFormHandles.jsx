@@ -16,9 +16,7 @@ const useFormHandler = ({
         if (!isEditMode) {
           formik.resetForm();
         }
-      } catch (error) {
-        console.error("Submission error:", error);
-      }
+      } catch (error) {}
     },
   });
 

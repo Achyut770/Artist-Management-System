@@ -3,8 +3,15 @@ import { songValidationSchema } from "./schema";
 import Button from "../../common/Ui/Button";
 import useFormHandler from "../../../hooks/useFormHandles";
 import InputField from "../../common/Ui/Input";
+import SelectField from "../../common/Ui/SelectField";
 
-const GENRES = ["rnb", "country", "classic", "rock", "jazz"];
+const GENRES = [
+  { label: "R&B", value: "rnb" },
+  { label: "Country", value: "country" },
+  { label: "Classic", value: "classic" },
+  { label: "Rock", value: "rock" },
+  { label: "Jazz", value: "jazz" },
+];
 
 const fields = [
   { id: "title", name: "title", type: "text", label: "Song Title" },
@@ -42,29 +49,12 @@ const SongForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         />
       ))}
 
-      <div className="form-group">
-        <label htmlFor="genre">Genre</label>
-
-        <select
-          id="genre"
-          name="genre"
-          value={formik.values.genre}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        >
-          <option value="" disabled>
-            Select a Genre
-          </option>
-          {GENRES.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-        {formik.touched.genre && formik.errors.genre && (
-          <div className="error-text">{formik.errors.genre}</div>
-        )}
-      </div>
+      <SelectField
+        label="Genre"
+        name="genre"
+        formik={formik}
+        options={GENRES}
+      />
 
       <Button
         type="submit"

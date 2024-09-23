@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { apiPath } from "../../api/api";
+import { apiPath, template } from "../../api/api";
 import PageLayout from "../../components/common/Layouts/PageLayout";
 import ArtistForm from "../../components/dashboard/Artist/ArtistForm";
 import useEditEntity from "../../hooks/useEditEntity";
@@ -9,7 +9,9 @@ import "../styles/addUser.css";
 
 const EditArtist = () => {
   const { artistId } = useParams();
-  const { data, error } = useFetch(`artist/${artistId}`);
+  const { data, error } = useFetch(
+    template(apiPath.fetchArtistById, { artistId })
+  );
   const editArtist = useEditEntity(apiPath.editArtist, artistId);
 
   const initialValue = data

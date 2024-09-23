@@ -11,7 +11,6 @@ const useFetch = (url) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      await new Promise((res) => setTimeout(() => res(), 2000));
       try {
         const response = await axiosPrivate.get(url);
         setData(response.data);

@@ -5,6 +5,8 @@ import useFormHandler from "../../../hooks/useFormHandles";
 import Button from "../../common/Ui/Button";
 import InputField from "../../common/Ui/Input";
 import { artistSchema } from "./schema";
+import SelectField from "../../common/Ui/SelectField";
+import RadioButtonField from "../../common/Ui/RadioButton";
 const fields = [
   { id: "name", name: "name", type: "text", label: "Name" },
   { id: "dob", name: "dob", type: "date", label: "Date of Birth" },
@@ -33,8 +35,8 @@ const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
   const { data, refetchTrigger, error } = useFetch(
     apiPath.userArtistWithOutArtist
   );
-  const users = data && data.user;
-  console.log("User", users, error);
+
+  const users = data ? data.user : [];
 
   const submit = async (values) => {
     try {
@@ -54,6 +56,15 @@ const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     no_of_albums_released: "",
     user_id: "",
   };
+  const selectArtistList = initialValue
+    ? [
+        {
+          value: initialValue.user_id,
+          label: initialValue.user_full_name,
+        },
+        ...users,
+      ]
+    : [...users];
 
   const formik = useFormHandler({
     initialValues,
@@ -79,54 +90,24 @@ const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         />
       ))}
 
-      <div className="form-group">
-        <label>Gender</label>
-        <div
-          role="group"
-          className="gender-group"
-          aria-labelledby="gender-group"
-        >
-          {genderOptions.map(({ value, label }) => (
-            <label key={value}>
-              <input
-                type="radio"
-                name="gender"
-                value={value}
-                checked={formik.values.gender === value}
-                onChange={formik.handleChange}
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-        {formik.touched.gender && formik.errors.gender && (
-          <div className="error-text">{formik.errors.gender}</div>
-        )}
-      </div>
-      <div className="form-group">
-        <label>User</label>
-        <select
-          name="user_id"
-          value={formik.values.user_id}
-          onChange={formik.handleChange}
-        >
-          <option value="">Select a user</option>
-          {isEditMode && (
-            <option value={initialValues.user_id}>
-              {initialValues.user_full_name}
-            </option>
-          )}
-          {users &&
-            users.map((user) => (
-              <option key={user.user_id} value={user.user_id}>
-                {user.full_name}
-              </option>
-            ))}
-        </select>
-        {formik.touched.user_id && formik.errors.user_id && (
-          <div className="error-text">{formik.errors.user_id}</div>
-        )}
-      </div>
+      <RadioButtonField
+        id="gender"
+        name="gender"
+        label="Gender"
+        options={genderOptions}
+        value={formik.values.gender}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.errors.gender}
+        touched={formik.touched.gender}
+      />
+
+      <SelectField
+        label="User"
+        name="user_id"
+        formik={formik}
+        options={selectArtistList}
+      />
 
       <Button
         type="submit"

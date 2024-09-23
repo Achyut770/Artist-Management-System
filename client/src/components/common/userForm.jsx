@@ -6,6 +6,8 @@ import {
 import Button from "./Ui/Button";
 import InputField from "./Ui/Input";
 import useFormHandler from "../../hooks/useFormHandles";
+import SelectField from "./Ui/SelectField";
+import RadioButtonField from "./Ui/RadioButton";
 
 const GENDERS = [
   { value: "m", label: "Male" },
@@ -80,48 +82,19 @@ const UserForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
         );
       })}
 
-      <div className="form-group">
-        <label>Gender</label>
-        <div
-          role="group"
-          className="gender-group"
-          aria-labelledby="gender-group"
-        >
-          {GENDERS.map((gender) => (
-            <label key={gender.value}>
-              <input
-                type="radio"
-                name="gender"
-                value={gender.value}
-                checked={formik.values.gender === gender.value}
-                onChange={formik.handleChange}
-              />
-              {gender.label}
-            </label>
-          ))}
-        </div>
-        {formik.touched.gender && formik.errors.gender && (
-          <div className="error-text">{formik.errors.gender}</div>
-        )}
-      </div>
+      <RadioButtonField
+        id="gender"
+        name="gender"
+        label="Gender"
+        options={GENDERS}
+        value={formik.values.gender}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.errors.gender}
+        touched={formik.touched.gender}
+      />
 
-      <div className="form-group">
-        <label htmlFor="role">Role</label>
-        <select id="role" name="role" {...formik.getFieldProps("role")}>
-          <option value="" disabled>
-            Select a Role
-          </option>
-          {roles.map(({ value, label }) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-        {formik.touched.role && formik.errors.role && (
-          <div className="error-text">{formik.errors.role}</div>
-        )}
-      </div>
-
+      <SelectField label="Role" name="role" formik={formik} options={roles} />
       <Button
         type="submit"
         className="submit-button"

@@ -33,13 +33,13 @@ h2 {
     margin-top: 0.3125rem;
 }
 
-.gender-group {
+.radio-group {
     display: flex;
     flex-direction: row;
     gap: 10%;
 }
 
-.gender-group label {
+.radio-group label {
     display: flex;
     flex-direction: row;
 }

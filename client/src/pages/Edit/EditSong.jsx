@@ -12,7 +12,7 @@ import "../styles/addUser.css";
 const EditSong = () => {
   const { songId } = useParams();
   const { user } = useAuth();
-  const { data, error } = useFetch(`song/single_song/${songId}`);
+  const { data, error } = useFetch(template(apiPath.fetchSongById, { songId }));
   const editSong = useEditEntity(
     template(apiPath.editSong, { artistId: user.artist_id }),
     songId
