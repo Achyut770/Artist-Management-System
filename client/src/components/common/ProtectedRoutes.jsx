@@ -1,10 +1,10 @@
 import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { RolesNavigate } from "../../context/AuthProvider";
-import Loader from "./Ui/Loader";
 import { useAuth } from "../../hooks/useAuth";
+import Loader from "./Ui/Loader";
 
-const ProtectedRoute = ({ allowedRoles }) => {
+const ProtectedRoute = ({ allowedRoles, children }) => {
   const { user, isloading } = useAuth();
   const location = useLocation();
 
@@ -21,7 +21,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
       />
     );
 
-  return <Outlet />;
+  return children;
 };
 
 export default ProtectedRoute;
