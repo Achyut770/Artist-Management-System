@@ -1,7 +1,7 @@
 import React from "react";
+import "./styles/inputField.css";
 
 const SelectField = ({ label, name, formik, options }) => {
-  console.log("Options", options);
   if (!options) return;
   return (
     <div className="form-group">

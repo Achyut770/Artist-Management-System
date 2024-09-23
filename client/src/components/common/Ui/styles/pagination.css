@@ -42,7 +42,7 @@
 }
 
 .disabled .page-link {
-    color: var(--disbale-color);
+    color: var(--disable-color);
     cursor: not-allowed;
     background-color: var(--disbale--background);
 }

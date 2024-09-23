@@ -1,0 +1,10 @@
+.no_artist{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    color:var(--primary-color);
+    height: 60vh;
+    font-size:max(1.5rem , 2vw);
+    box-shadow:var(--form-border-shadow)
+}

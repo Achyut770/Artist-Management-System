@@ -7,6 +7,8 @@ import InputField from "../../common/Ui/Input";
 import { artistSchema } from "./schema";
 import SelectField from "../../common/Ui/SelectField";
 import RadioButtonField from "../../common/Ui/RadioButton";
+import "./styles/artistForm.css";
+
 const fields = [
   { id: "name", name: "name", type: "text", label: "Name" },
   { id: "dob", name: "dob", type: "date", label: "Date of Birth" },
@@ -72,6 +74,11 @@ const ArtistForm = ({ initialValue, handleSubmit, isEditMode = false }) => {
     handleSubmit: submit,
     isEditMode,
   });
+
+  if (!selectArtistList.length)
+    return (
+      <div className="no_artist">No Any Artist User To Make A Artist From</div>
+    );
 
   return (
     <form onSubmit={formik.handleSubmit}>
